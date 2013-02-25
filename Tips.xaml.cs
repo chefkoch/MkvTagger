@@ -1,32 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Xml;
-using Path = System.IO.Path;
 
 namespace MPTvServies2MKV
 {
   /// <summary>
-  /// Interaktionslogik für MainWindow.xaml
+  /// Interaktionslogik für Tips.xaml
   /// </summary>
-  public partial class MainWindow : Window
+  public partial class Tips : UserControl
   {
-
-    public MainWindow()
+    public Tips()
     {
       InitializeComponent();
     }

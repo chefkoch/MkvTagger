@@ -60,6 +60,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomSeriesTag.xaml.cs">
+      <DependentUpon>CustomSeriesTag.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomMovieTag.xaml.cs">
+      <DependentUpon>CustomMovieTag.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tips.xaml.cs">
+      <DependentUpon>Tips.xaml</DependentUpon>
+    </Compile>
+    <Page Include="CustomSeriesTag.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomMovieTag.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -68,12 +85,25 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FileBasedLogEntry.cs" />
+    <Compile Include="MatroskaTag.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MPTVSeries.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tips.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MPTVSeries.xaml.cs">
+      <DependentUpon>MPTVSeries.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
