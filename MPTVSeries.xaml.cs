@@ -113,7 +113,7 @@ namespace MPTvServies2MKV
         bw.ProgressChanged += WriteMkvTagsProgressChanged;
       }
 
-      contentGrid.IsEnabled = false;
+      contentDock.IsEnabled = false;
       progressText.Text = string.Empty;
       progressBar.Style = FindResource("greenProgress") as Style;
       progressDock.IsEnabled = true;
@@ -164,7 +164,7 @@ namespace MPTvServies2MKV
         progressText.Text = "Done!";
       }
 
-      contentGrid.IsEnabled = true;
+      contentDock.IsEnabled = true;
       progressDock.IsEnabled = false;
     }
 
@@ -524,6 +524,23 @@ namespace MPTvServies2MKV
       if (ReferenceEquals(item, null)) return;
 
       item.OpenExplorerFileSelected();
+    }
+
+    private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      ListBox lb = sender as ListBox;
+      if (ReferenceEquals(lb, null)) return;
+
+      if (lb.SelectedItems.Count != 1) return;
+
+      FileBasedLogEntry item = lb.SelectedItems[0] as FileBasedLogEntry;
+      if (ReferenceEquals(item, null)) return;
+
+      string extension = Path.GetExtension(item.Filepath);
+      if (extension != null && extension.ToLower().Equals(".xml"))
+      {
+        XmlPreview.Text = File.ReadAllText(item.Filepath);
+      }
     }
   }
 

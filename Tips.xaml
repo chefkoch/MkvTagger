@@ -6,16 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
   <UserControl.Resources>
-    <Style x:Key="hintStyle" TargetType="Label">
-      <Setter Property="Background" Value="LemonChiffon" />
-      <Setter Property="FontStyle" Value="Italic" />
-      <Setter Property="Padding" Value="8,4" />
-      <Setter Property="Margin" Value="4" />
-      <Setter Property="BorderThickness" Value="2"/>
-      <Setter Property="BorderBrush" Value="Moccasin"/>
-    </Style>
+    <ResourceDictionary Source="Common.Styles.xaml"/>
   </UserControl.Resources>
   <StackPanel>
-    <Label Style="{StaticResource hintStyle}">You can DoubleClick on LogItems to show the files in Explorer.</Label>
+    <Label Style="{StaticResource hint}">You can DoubleClick on LogItems to show the files in Explorer.</Label>
   </StackPanel>
 </UserControl>
