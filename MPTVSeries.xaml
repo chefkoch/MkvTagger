@@ -45,7 +45,23 @@
   </UserControl.Resources>
   <DockPanel>
     <Expander DockPanel.Dock="Right" ExpandDirection="Right">
-      <TextBox x:Name="XmlPreview"></TextBox>
+      <GroupBox Header="XML-Preview">
+        <DockPanel>
+          <ToolBarPanel DockPanel.Dock="Top">
+            <ToolBar OverflowMode="Never">
+              <Menu ToolBar.OverflowMode="Never">
+                <MenuItem Header="Save"/>
+              </Menu>
+            </ToolBar>
+          </ToolBarPanel>
+          <avalonEdit:TextEditor xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                 Name="textEditor"
+                                 FontFamily="Consolas"
+                                 SyntaxHighlighting="XML"
+                                 FontSize="10pt"
+                                 MinWidth="150" />
+        </DockPanel>
+      </GroupBox> 
     </Expander>
     <DockPanel x:Name="progressDock" Visibility="Collapsed" DockPanel.Dock="Top">
       <Button DockPanel.Dock="Right" Margin="5" Click="cancelAsyncButton_Click">Cancel</Button>
