@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MP-TvSeries 2 MKV" Height="350" Width="525"
         xmlns:local="clr-namespace:MPTvServies2MKV">
-  <Grid>
+  <Grid AllowDrop="True" Drop="FileDropHandler">
     <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
       <TabItem Header="Tips">
         <local:Tips/>
       </TabItem>
       <TabItem Header="MP-TVSeries">
-        <local:MPTVSeries/>
+        <local:MPTVSeries x:Name="mptvseries"/>
       </TabItem>
       <TabItem Header="MovingPicures">
         <Grid Background="#FFE5E5E5">
@@ -17,10 +17,10 @@
         </Grid>
       </TabItem>
       <TabItem Header="Custom SeriesTag">
-        <local:CustomSeriesTag/>
+        <local:CustomSeriesTag x:Name="customSeriesTag"/>
       </TabItem>
       <TabItem Header="Custom MovieTag">
-        <local:CustomMovieTag/>
+        <local:CustomMovieTag x:Name="customMovieTag"/>
       </TabItem>
     </TabControl>
   </Grid>

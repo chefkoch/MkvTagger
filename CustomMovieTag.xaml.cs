@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Matroska;
 
 namespace MPTvServies2MKV
 {
@@ -24,9 +25,14 @@ namespace MPTvServies2MKV
       InitializeComponent();
     }
 
+    public void SetFile(string filepath)
+    {
+
+    }
+
     private void UpdatePreview(object sender, TextChangedEventArgs e)
     {
-      MatroskaTag tag = new MatroskaTag();
+      MatroskaTags tag = new MatroskaTags();
 
       if (!string.IsNullOrEmpty(movieNameTextBox.Text))
         tag.Movie.MovieName = movieNameTextBox.Text;

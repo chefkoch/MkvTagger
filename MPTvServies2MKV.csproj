@@ -69,6 +69,10 @@
     <Compile Include="CustomMovieTag.xaml.cs">
       <DependentUpon>CustomMovieTag.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Matroska\MatroskaLoader.cs" />
+    <Compile Include="Matroska\MatroskaTags.cs" />
+    <Compile Include="Matroska\MovieTag.cs" />
+    <Compile Include="Matroska\SeriesTag.cs" />
     <Compile Include="Tips.xaml.cs">
       <DependentUpon>Tips.xaml</DependentUpon>
     </Compile>
@@ -94,7 +98,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileBasedLogEntry.cs" />
-    <Compile Include="MatroskaTag.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -132,8 +135,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Matroska\matroskatags.dtd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

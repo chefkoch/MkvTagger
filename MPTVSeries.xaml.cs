@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Xml;
 using System.Xml.Linq;
+using Matroska;
 
 namespace MPTvServies2MKV
 {
@@ -31,6 +32,11 @@ namespace MPTvServies2MKV
       string path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
       path = Path.Combine(path, "Team MediaPortal", "MediaPortal", "database", "TVSeriesDatabase4.db3");
       dbPath.Text = path;
+    }
+
+    public void SetMediaPath(string folder)
+    {
+      mediaPath.Text = folder;
     }
 
     private void BrowseDbPath(object sender, RoutedEventArgs e)
@@ -345,12 +351,11 @@ namespace MPTvServies2MKV
 
         try
         {
-          if (TryExtractTagFromMatroska(mkvFile.FullName, xmlFile))
+          MatroskaTags tags;
+          if (MatroskaLoader.TryExtractTagFromMatroska(mkvFile.FullName, out tags))
           {
-            MatroskaTag tag = new MatroskaTag();
-            tag.Load(xmlFile);
             worker.ReportProgress(100*current/total,
-                                  new FileBasedLogEntry(mkvFile.FullName, "Extracted tags <" + tag.Series + "> from "));
+                                  new FileBasedLogEntry(mkvFile.FullName, "Extracted tags <" + tags.Series.SeriesName + "> from "));
           }
         }
         catch (Exception ex)
@@ -410,9 +415,9 @@ namespace MPTvServies2MKV
         string xmlFile = GetXmlFilename(file);
 
         // init document
-        MatroskaTag tag = new MatroskaTag();
+        MatroskaTags tag = new MatroskaTags();
         if (File.Exists(xmlFile))
-          tag.Load(xmlFile);
+          tag = MatroskaLoader.ReadTagFromXML(xmlFile);
 
         tag.Series.SeriesName = args.Series[_episodes[file].SeriesID].Name;
         tag.Series.SeriesNameSort = args.Series[_episodes[file].SeriesID].SortName;
@@ -423,12 +428,12 @@ namespace MPTvServies2MKV
 
         if (File.Exists(xmlFile))
         {
-          tag.Save(xmlFile);
+          MatroskaLoader.WriteTagToXML(tag, xmlFile);
           worker.ReportProgress(100*current/total, new FileBasedLogEntry(xmlFile, "XML updated: "));
         }
         else
         {
-          tag.Save(xmlFile);
+          MatroskaLoader.WriteTagToXML(tag, xmlFile);
           worker.ReportProgress(100*current/total, new FileBasedLogEntry(xmlFile, "XML created: "));
         }
       }
@@ -484,18 +489,9 @@ namespace MPTvServies2MKV
 
         try
         {
-          ProcessStartInfo info = new ProcessStartInfo();
-          info.FileName = "mkvpropedit.exe";
-          info.Arguments = String.Format(" \"{0}\" --tags global:\"{1}\"", mkvFile.FullName, xmlFile);
-          info.UseShellExecute = false;
-          info.RedirectStandardInput = true;
-          info.RedirectStandardOutput = true;
-          info.RedirectStandardError = true;
-          info.CreateNoWindow = true;
+          int exitCode = MatroskaLoader.WriteTagToMatroska(mkvFile.FullName, xmlFile);
 
-          Process proc = Process.Start(info);
-          proc.WaitForExit();
-          if (proc.ExitCode == 0)
+          if (exitCode == 0)
           {
             worker.ReportProgress(100*current/total, new FileBasedLogEntry(mkvFile.FullName, "MKV updated: "));
             if (args.DeleteXmlAfterMkvUpdate)
@@ -506,7 +502,7 @@ namespace MPTvServies2MKV
                                   new FileBasedLogEntry(mkvFile.FullName,
                                                         string.Format(
                                                           "MKV updated with MKVPropEdit exit code = {0} file :",
-                                                          proc.ExitCode)));
+                                                          exitCode)));
         }
         catch (Exception ex)
         {
@@ -544,48 +540,12 @@ namespace MPTvServies2MKV
       switch (extension.ToLower())
       {
         case ".xml":
-          textEditor.Text = File.ReadAllText(item.Filepath);
-          break;
-
         case ".mkv":
           //todo: make it async
-          string xmlTag = ExtractTagFromMatroska(item.Filepath);
-          if (!string.IsNullOrEmpty(xmlTag))
-            textEditor.Text = xmlTag;
+          MatroskaTags tags = MatroskaLoader.ReadTag(item.Filepath);
+          textEditor.Text = MatroskaLoader.GetXML(tags);
           break;
       }
-    }
-
-    private static bool TryExtractTagFromMatroska(string matroskaFile, string xmlFile)
-    {
-      string fileContent = ExtractTagFromMatroska(matroskaFile);
-
-      if (string.IsNullOrEmpty(fileContent))
-        return false;
-
-      File.WriteAllText(xmlFile, fileContent);
-      return true;
-    }
-
-    private static string ExtractTagFromMatroska(string matroskaFile)
-    {
-      string tempFile = Path.GetTempFileName();
-
-      ProcessStartInfo info = new ProcessStartInfo();
-      info.FileName = "mkvextract.exe";
-      info.Arguments = String.Format(" tags \"{0}\" --redirect-output \"{1}\"", matroskaFile, tempFile);
-      info.UseShellExecute = false;
-      info.RedirectStandardInput = true;
-      info.RedirectStandardOutput = true;
-      info.RedirectStandardError = true;
-      info.CreateNoWindow = true;
-
-      Process proc = Process.Start(info);
-      proc.WaitForExit();
-
-      string content = File.ReadAllText(tempFile);
-      File.Delete(tempFile);
-      return content;
     }
   }
 
