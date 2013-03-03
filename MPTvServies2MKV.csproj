@@ -69,10 +69,15 @@
     <Compile Include="CustomMovieTag.xaml.cs">
       <DependentUpon>CustomMovieTag.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Matroska\Helpers\Actor.cs" />
+    <Compile Include="Matroska\Helpers\SortWithEntity.cs" />
+    <Compile Include="Matroska\Helpers\MovieTag.cs" />
+    <Compile Include="Matroska\Helpers\SeriesTag.cs" />
     <Compile Include="Matroska\MatroskaLoader.cs" />
     <Compile Include="Matroska\MatroskaTags.cs" />
-    <Compile Include="Matroska\MovieTag.cs" />
-    <Compile Include="Matroska\SeriesTag.cs" />
+    <Compile Include="Matroska\Simple.cs" />
+    <Compile Include="Matroska\Targets.cs" />
+    <Compile Include="Matroska\Tag.cs" />
     <Compile Include="Tips.xaml.cs">
       <DependentUpon>Tips.xaml</DependentUpon>
     </Compile>

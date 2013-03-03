@@ -33,24 +33,27 @@ using System.Xml.Linq;
 
 namespace Matroska
 {
-  public class MovieTag
+  public class SortWithEntity : Simple
   {
-    private readonly MatroskaTags _matroskaTags;
-
-    public MovieTag(MatroskaTags tags)
+    public SortWithEntity(Simple simple)
     {
-      _matroskaTags = tags;
+      this.BinaryValue = simple.BinaryValue;
+      this.DefaultLanguage = simple.DefaultLanguage;
+      this.DefaultLanguageValue = simple.DefaultLanguageValue;
+      this.Name = simple.Name;
+      this.Simples = simple.Simples;
+      this.StringValue = simple.StringValue;
+      this.TagLanguageValue = simple.TagLanguageValue;
     }
 
-    public string MovieName
+    public string SortWith
     {
       get
       {
         try
         {
-          Tag movieTag = _matroskaTags.GetTag(50);
-          Simple titleSimple = _matroskaTags.GetSimple(movieTag, "TITLE");
-          return titleSimple.StringValue;
+          Simple sortSimple = GetSimple("SORT_WITH");
+          return sortSimple.StringValue;
         }
         catch (Exception)
         {
@@ -59,32 +62,8 @@ namespace Matroska
       }
       set
       {
-        Tag movieTag = _matroskaTags.GetOrAddTag(50);
-        Simple titleSimple = _matroskaTags.GetOrAddSimple(movieTag, "TITLE");
-        titleSimple.StringValue = value;
-      }
-    }
-
-    public string IMDB_ID
-    {
-      get
-      {
-        try
-        {
-          Tag movieTag = _matroskaTags.GetTag(50);
-          Simple titleSimple = _matroskaTags.GetSimple(movieTag, "IMDB");
-          return titleSimple.StringValue;
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-      set
-      {
-        Tag movieTag = _matroskaTags.GetOrAddTag(50);
-        Simple titleSimple = _matroskaTags.GetOrAddSimple(movieTag, "IMDB");
-        titleSimple.StringValue = value;
+        Simple sortSimple = GetOrAddSimple("SORT_WITH");
+        sortSimple.StringValue = value;
       }
     }
   }

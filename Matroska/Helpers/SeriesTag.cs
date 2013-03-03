@@ -49,7 +49,7 @@ namespace Matroska
         try
         {
           Tag seriesTag = _matroskaTags.GetTag(70);
-          Simple titleSimple = _matroskaTags.GetSimple(seriesTag, "TITLE");
+          Simple titleSimple = seriesTag.GetSimple("TITLE");
           return titleSimple.StringValue;
         }
         catch (Exception)
@@ -60,7 +60,7 @@ namespace Matroska
       set
       {
         Tag seriesTag = _matroskaTags.GetOrAddTag(70);
-        Simple titleSimple = _matroskaTags.GetOrAddSimple(seriesTag, "TITLE");
+        Simple titleSimple = seriesTag.GetOrAddSimple("TITLE");
         titleSimple.StringValue = value;
       }
     }
@@ -72,8 +72,8 @@ namespace Matroska
         try
         {
           Tag seriesTag = _matroskaTags.GetTag(70);
-          Simple titleSimple = _matroskaTags.GetSimple(seriesTag, "TITLE");
-          Simple sortSimple = _matroskaTags.GetSimple(titleSimple, "SORT_WITH");
+          Simple titleSimple = seriesTag.GetSimple("TITLE");
+          Simple sortSimple = titleSimple.GetSimple("SORT_WITH");
           return sortSimple.StringValue;
         }
         catch (Exception)
@@ -84,8 +84,8 @@ namespace Matroska
       set
       {
         Tag seriesTag = _matroskaTags.GetOrAddTag(70);
-        Simple titleSimple = _matroskaTags.GetOrAddSimple(seriesTag, "TITLE");
-        Simple sortSimple = _matroskaTags.GetOrAddSimple(titleSimple, "SORT_WITH");
+        Simple titleSimple = seriesTag.GetOrAddSimple("TITLE");
+        Simple sortSimple = titleSimple.GetOrAddSimple("SORT_WITH");
         sortSimple.StringValue = value;
       }
     }
@@ -97,7 +97,7 @@ namespace Matroska
         try
         {
           Tag seasontag = _matroskaTags.GetTag(60);
-          Simple indexSimple = _matroskaTags.GetSimple(seasontag, "PART_NUMBER");
+          Simple indexSimple = seasontag.GetSimple("PART_NUMBER");
           return int.Parse(indexSimple.StringValue);
         }
         catch (Exception)
@@ -108,7 +108,7 @@ namespace Matroska
       set
       {
         Tag seasontag = _matroskaTags.GetOrAddTag(60);
-        Simple indexSimple = _matroskaTags.GetOrAddSimple(seasontag, "PART_NUMBER");
+        Simple indexSimple = seasontag.GetOrAddSimple("PART_NUMBER");
         indexSimple.StringValue = value.ToString();
       }
     }

@@ -42,6 +42,7 @@ namespace Matroska
 
     public MatroskaTags()
     {
+      TagList = new List<Tag>();
       Series = new SeriesTag(this);
       Movie = new MovieTag(this);
     }
@@ -74,38 +75,6 @@ namespace Matroska
       return tag;
     }
 
-    public Simple GetSimple(Tag tag, string name)
-    {
-      return tag.Simples.FirstOrDefault(s => s.Name == name);
-    }
-
-    public Simple GetSimple(Simple simple, string name)
-    {
-      return simple.Simples.FirstOrDefault(s => s.Name == name);
-    }
-
-    public Simple GetOrAddSimple(Tag tag, string name)
-    {
-      Simple newSimple = tag.Simples.FirstOrDefault(s => s.Name == name);
-      if (ReferenceEquals(newSimple, null))
-      {
-        newSimple = new Simple(name);
-        tag.Simples.Add(newSimple);
-      }
-      return newSimple;
-    }
-
-    public Simple GetOrAddSimple(Simple simple, string name)
-    {
-      Simple newSimple = simple.Simples.FirstOrDefault(s => s.Name == name);
-      if (ReferenceEquals(newSimple, null))
-      {
-        newSimple = new Simple(name);
-        simple.Simples.Add(newSimple);
-      }
-      return newSimple;
-    }
-
     public void RemoveSpecificSimpleChild(XElement tagOrSimple, string name)
     {
       while (true)
@@ -136,97 +105,13 @@ namespace Matroska
       }
     }
 
+    public void ReadTags(string filename)
+    {
+      MatroskaTags tags = MatroskaLoader.ReadTag(filename);
+      if (tags != null)
+        TagList = tags.TagList;
+    }
+
     #endregion helper methods
-  }
-
-  public class Tag
-  {
-    public Tag()
-    {
-    }
-
-    public Tag(int targetTypeValue)
-    {
-      Targets = new Targets { TargetTypeValue = targetTypeValue };
-    }
-
-    [XmlElement("Targets")]
-    public Targets Targets { get; set; }
-
-    [XmlElement("Simple")]
-    public List<Simple> Simples { get; set; }
-  }
-
-  [Serializable]
-  public class Targets
-  {
-    [XmlElement("TargetTypeValue")]
-    public int TargetTypeValue { get; set; }
-
-    [XmlElement("TargetType")]
-    public string TargetType { get; set; }
-
-    [XmlElement("TrackUID")]
-    public List<int> TrackUIDs { get; set; }
-
-    [XmlElement("EditionUID")]
-    public List<int> EditionUIDs { get; set; }
-
-    [XmlElement("ChapterUID")]
-    public List<int> ChapterUIDs { get; set; }
-
-    [XmlElement("AttachmentUID")]
-    public List<int> AttachmentUIDs { get; set; }
-  }
-
-  [Serializable]
-  public class Simple
-  {
-    public Simple()
-    {
-    }
-
-    public Simple(string name)
-    {
-      Name = name;
-      TagLanguageValue = "und";
-      DefaultLanguageValue = 1;
-    }
-
-    public Simple(string name, string value)
-      : this(name)
-    {
-      StringValue = value;
-    }
-
-    public Simple(string name, int value)
-      : this(name, value.ToString())
-    {
-    }
-
-    [XmlElement("Name")]
-    public string Name { get; set; }
-
-    [XmlElement("String")]
-    public string StringValue { get; set; }
-
-    [XmlElement("TagLanguage")]
-    public string TagLanguageValue { get; set; }
-
-    [XmlElement("DefaultLanguage")]
-    public int DefaultLanguageValue { get; set; }
-
-    [XmlIgnore]
-    public bool DefaultLanguage
-    {
-      get { return DefaultLanguageValue == 1; }
-      set { DefaultLanguageValue = value ? 1 : 0; }
-    }
-
-    [XmlElement("Binary")]
-    public object BinaryValue { get; set; }
-
-    [XmlElement("Simple")]
-    public List<Simple> Simples { get; set; }
   }
 }
