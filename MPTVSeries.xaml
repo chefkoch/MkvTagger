@@ -1,7 +1,7 @@
-﻿<UserControl x:Class="MPTvServies2MKV.MPTVSeries"
+﻿<UserControl x:Class="MatroskaTagger.MPTVSeries"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ex="clr-namespace:MPTvServies2MKV.WpfExtensions">
+             xmlns:ex="clr-namespace:MatroskaTagger.WpfExtensions">
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>

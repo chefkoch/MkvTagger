@@ -62,7 +62,7 @@ namespace Matroska
 
       // XML file
       if (extension.ToLower().Equals(".xml"))
-        return ReadTagFromXML(fileName);
+        return ReadTagFromXMLFile(fileName);
 
       // Matroska file
       if (MatroskaExtensions.Contains(extension.ToLower()))
@@ -72,7 +72,26 @@ namespace Matroska
       throw new FileFormatException("File was not identified as XML or Matroska-file.");
     }
 
-    public static MatroskaTags ReadTagFromXML(string xmlFile)
+    public static MatroskaTags ReadTagFromXML(string serializedTags)
+    {
+      MatroskaTags tags;
+
+      try
+      {
+        XmlSerializer deserializer = new XmlSerializer(typeof(MatroskaTags));
+        TextReader textReader = new StringReader(serializedTags);
+        tags = (MatroskaTags)deserializer.Deserialize(textReader);
+        textReader.Close();
+      }
+      catch (Exception)
+      {
+        return null;
+      }
+
+      return tags;
+    }
+
+    public static MatroskaTags ReadTagFromXMLFile(string xmlFile)
     {
       MatroskaTags tags;
 
@@ -107,7 +126,7 @@ namespace Matroska
       Process proc = Process.Start(info);
       proc.WaitForExit();
 
-      MatroskaTags result = ReadTagFromXML(tempFile);
+      MatroskaTags result = ReadTagFromXMLFile(tempFile);
       File.Delete(tempFile);
       return result;
     }

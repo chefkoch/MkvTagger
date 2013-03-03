@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MPTvServies2MKV.Tips"
+﻿<UserControl x:Class="MatroskaTagger.Tips"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,6 +9,20 @@
     <ResourceDictionary Source="Common.Styles.xaml"/>
   </UserControl.Resources>
   <StackPanel>
-    <Label Style="{StaticResource hint}">You can DoubleClick on LogItems to show the files in Explorer.</Label>
+    <Label Style="{StaticResource hint}">
+      <TextBlock TextWrapping="WrapWithOverflow">
+        You can DoubleClick on LogItems to show the files in Explorer.
+      </TextBlock>
+    </Label>
+    <Label Style="{StaticResource hint}">
+      <TextBlock TextWrapping="WrapWithOverflow">
+        You can drag'n'drop a folder from Windows Explorer to the window to set the media paths.
+      </TextBlock>
+    </Label>
+    <Label Style="{StaticResource hint}">
+      <TextBlock TextWrapping="WrapWithOverflow">
+        You can drag'n'drop a MKV- or XML-file from Windows Explorer to the window to view or edit the tags.
+      </TextBlock>
+    </Label>
   </StackPanel>
 </UserControl>

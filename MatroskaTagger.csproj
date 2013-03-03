@@ -7,8 +7,8 @@
     <ProjectGuid>{3C417313-160B-49C5-8BBE-3B2FA32AF990}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPTvServies2MKV</RootNamespace>
-    <AssemblyName>MPTvServies2MKV</AssemblyName>
+    <RootNamespace>MatroskaTagger</RootNamespace>
+    <AssemblyName>MatroskaTagger</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -63,25 +63,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\EditSortWith.xaml.cs">
+      <DependentUpon>EditSortWith.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomSeriesTag.xaml.cs">
       <DependentUpon>CustomSeriesTag.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomMovieTag.xaml.cs">
       <DependentUpon>CustomMovieTag.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EditSimple.xaml.cs">
+      <DependentUpon>EditSimple.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Matroska\Helpers\Actor.cs" />
     <Compile Include="Matroska\Helpers\SortWithEntity.cs" />
-    <Compile Include="Matroska\Helpers\MovieTag.cs" />
-    <Compile Include="Matroska\Helpers\SeriesTag.cs" />
-    <Compile Include="Matroska\MatroskaLoader.cs" />
-    <Compile Include="Matroska\MatroskaTags.cs" />
     <Compile Include="Matroska\Simple.cs" />
     <Compile Include="Matroska\Targets.cs" />
     <Compile Include="Matroska\Tag.cs" />
+    <Compile Include="Matroska\MatroskaLoader.cs" />
+    <Compile Include="Matroska\MatroskaTags.cs" />
+    <Compile Include="Matroska\Helpers\MovieTag.cs" />
+    <Compile Include="Matroska\Helpers\SeriesTag.cs" />
     <Compile Include="Tips.xaml.cs">
       <DependentUpon>Tips.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfExtensions\GridExpanderSizeBehavior.cs" />
+    <Page Include="Controls\EditSortWith.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="CustomSeriesTag.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -91,6 +101,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Common.Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EditSimple.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Matroska;
 
-namespace MPTvServies2MKV
+namespace MatroskaTagger
 {
   /// <summary>
   /// Interaktionslogik für CustomSeriesTag.xaml
@@ -25,26 +25,58 @@ namespace MPTvServies2MKV
       InitializeComponent();
     }
 
+    private MatroskaTags originalTag;
+
     public void SetFile(string filepath)
     {
+      originalTag = MatroskaLoader.ReadTag(filepath);
+      if (ReferenceEquals(originalTag, null))
+      {
+        textEditorOriginal.Text = string.Empty;
+        //clear textboxes
+      }
+      {
+        textEditorOriginal.Text = MatroskaLoader.GetXML(originalTag);
+        UpdateGUI(originalTag);
+      }
+    }
 
+    private void UpdateGUI(MatroskaTags tags)
+    {
+      if (tags.Movie.HasMovieTitle)
+        seriesName.Value = tags.Series.SeriesName.StringValue;
+
+      if (tags.Movie.HasMovieTitle && !string.IsNullOrEmpty(tags.Movie.MovieTitle.SortWith))
+        seriesName.ValueSort = tags.Series.SeriesName.SortWith;
+
+      if (!ReferenceEquals(tags.Series.SeasonIndex, null))
+        seasonIndex.Value = tags.Series.SeasonIndex.ToString();
     }
 
     private void UpdatePreview(object sender, TextChangedEventArgs e)
     {
-      MatroskaTags tag = new MatroskaTags();
-
-      if (!string.IsNullOrEmpty(seriesNameTextBox.Text))
-        tag.Series.SeriesName = seriesNameTextBox.Text;
-
-      if (!string.IsNullOrEmpty(seriesSortNameTextBox.Text))
-        tag.Series.SeriesNameSort = seriesSortNameTextBox.Text;
-
-      if (!string.IsNullOrEmpty(seasonIndexTextBox.Text))
+      MatroskaTags tag;
+      if (!ReferenceEquals(originalTag, null))
       {
-        int seasonIndex;
-        if (int.TryParse(seasonIndexTextBox.Text, out seasonIndex))
-          tag.Series.SeasonIndex = seasonIndex;
+        string xmlString = MatroskaLoader.GetXML(originalTag);
+        tag = MatroskaLoader.ReadTagFromXML(xmlString);
+      }
+      else
+        tag = new MatroskaTags();
+
+      if (!string.IsNullOrEmpty(seriesName.Value))
+      {
+        tag.Series.SetTitle(seriesName.Value);
+
+        if (!string.IsNullOrEmpty(seriesName.ValueSort))
+          tag.Series.SeriesName.SortWith = seriesName.ValueSort;
+      }
+
+      if (!string.IsNullOrEmpty(seasonIndex.Value))
+      {
+        int index;
+        if (int.TryParse(seasonIndex.Value, out index))
+          tag.Series.SeasonIndex = index;
       }
 
       if (!string.IsNullOrEmpty(episodeIndexList.Text))
@@ -61,7 +93,8 @@ namespace MPTvServies2MKV
           tag.Series.EpisodeIndexList = indexList.AsReadOnly();
       }
 
-      previewTextBox.Text = tag.ToString();
+      textEditorOriginal.Text = MatroskaLoader.GetXML(originalTag);
+      textEditorNew.Text = MatroskaLoader.GetXML(tag);
     }
   }
 }

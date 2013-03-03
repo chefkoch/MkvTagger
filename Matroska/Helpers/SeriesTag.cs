@@ -42,52 +42,32 @@ namespace Matroska
       _matroskaTags = tags;
     }
 
-    public string SeriesName
+    public bool HasMovieTitle
+    {
+      get { return !ReferenceEquals(SeriesName, null); }
+    }
+
+    public SortWithEntity SeriesName
     {
       get
       {
         try
         {
-          Tag seriesTag = _matroskaTags.GetTag(70);
-          Simple titleSimple = seriesTag.GetSimple("TITLE");
-          return titleSimple.StringValue;
+          Tag movieTag = _matroskaTags.GetTag(70);
+          return new SortWithEntity(movieTag.GetSimple("TITLE"));
         }
         catch (Exception)
         {
           return null;
         }
-      }
-      set
-      {
-        Tag seriesTag = _matroskaTags.GetOrAddTag(70);
-        Simple titleSimple = seriesTag.GetOrAddSimple("TITLE");
-        titleSimple.StringValue = value;
       }
     }
 
-    public string SeriesNameSort
+    public void SetTitle(string titleValue)
     {
-      get
-      {
-        try
-        {
-          Tag seriesTag = _matroskaTags.GetTag(70);
-          Simple titleSimple = seriesTag.GetSimple("TITLE");
-          Simple sortSimple = titleSimple.GetSimple("SORT_WITH");
-          return sortSimple.StringValue;
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-      set
-      {
-        Tag seriesTag = _matroskaTags.GetOrAddTag(70);
-        Simple titleSimple = seriesTag.GetOrAddSimple("TITLE");
-        Simple sortSimple = titleSimple.GetOrAddSimple("SORT_WITH");
-        sortSimple.StringValue = value;
-      }
+      Tag movieTag = _matroskaTags.GetOrAddTag(70);
+      Simple titleSimple = movieTag.GetOrAddSimple("TITLE");
+      titleSimple.StringValue = titleValue;
     }
 
     public int? SeasonIndex
@@ -149,7 +129,7 @@ namespace Matroska
 
     public override string ToString()
     {
-      return String.Format("{0}|{1}|{2}|{3}", SeriesName, SeriesNameSort, SeasonIndex, string.Join("|", EpisodeIndexList));
+      return String.Format("{0}|{1}|{2}", SeriesName, SeasonIndex, string.Join("|", EpisodeIndexList));
     }
 
     //public void Test()

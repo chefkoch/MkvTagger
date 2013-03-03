@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace MPTvServies2MKV.WpfExtensions
+namespace MatroskaTagger.WpfExtensions
 {
   public class GridExpanderSizeBehavior
   {

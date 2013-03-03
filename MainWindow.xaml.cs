@@ -19,7 +19,7 @@ using System.Xml.Serialization;
 using Matroska;
 using Path = System.IO.Path;
 
-namespace MPTvServies2MKV
+namespace MatroskaTagger
 {
   /// <summary>
   /// Interaktionslogik für MainWindow.xaml

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Windows;
 using Matroska;
 
-namespace MPTvServies2MKV
+namespace MatroskaTagger
 {
   /// <summary>
   /// Interaktionslogik für "App.xaml"

@@ -70,31 +70,6 @@ namespace Matroska
       titleSimple.StringValue = titleValue;
     }
 
-    //public string MovieTitleSort
-    //{
-    //  get
-    //  {
-    //    try
-    //    {
-    //      Tag movieTag = _matroskaTags.GetTag(50);
-    //      Simple titleSimple = movieTag.GetSimple("TITLE");
-    //      Simple sortSimple = titleSimple.GetSimple("SORT_WITH");
-    //      return sortSimple.StringValue;
-    //    }
-    //    catch (Exception)
-    //    {
-    //      return null;
-    //    }
-    //  }
-    //  set
-    //  {
-    //    Tag movieTag = _matroskaTags.GetOrAddTag(50);
-    //    Simple titleSimple = _matroskaTags.GetOrAddSimple(movieTag, "TITLE");
-    //    Simple sortSimple = _matroskaTags.GetOrAddSimple(titleSimple, "SORT_WITH");
-    //    sortSimple.StringValue = value;
-    //  }
-    //}
-
     public string IMDB_ID
     {
       get

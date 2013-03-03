@@ -18,7 +18,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Matroska;
 
-namespace MPTvServies2MKV
+namespace MatroskaTagger
 {
   public partial class MPTVSeries
   {
@@ -417,10 +417,10 @@ namespace MPTvServies2MKV
         // init document
         MatroskaTags tag = new MatroskaTags();
         if (File.Exists(xmlFile))
-          tag = MatroskaLoader.ReadTagFromXML(xmlFile);
+          tag = MatroskaLoader.ReadTagFromXMLFile(xmlFile);
 
-        tag.Series.SeriesName = args.Series[_episodes[file].SeriesID].Name;
-        tag.Series.SeriesNameSort = args.Series[_episodes[file].SeriesID].SortName;
+        tag.Series.SeriesName.StringValue = args.Series[_episodes[file].SeriesID].Name;
+        tag.Series.SeriesName.SortWith = args.Series[_episodes[file].SeriesID].SortName;
         tag.Series.SeasonIndex = args.Episodes[file].SeasonIndex;
 
         if (args.OptionalTagsToWrite.Contains(KEY_SERIES_SORTNAME))

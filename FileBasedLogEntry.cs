@@ -22,7 +22,7 @@
 
 #endregion
 
-namespace MPTvServies2MKV
+namespace MatroskaTagger
 {
   public class FileBasedLogEntry
   {

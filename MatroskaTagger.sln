@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPTvServies2MKV", "MPTvServies2MKV.csproj", "{3C417313-160B-49C5-8BBE-3B2FA32AF990}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatroskaTagger", "MatroskaTagger.csproj", "{3C417313-160B-49C5-8BBE-3B2FA32AF990}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
