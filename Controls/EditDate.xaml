@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MatroskaTagger.EditSimple"
+﻿<UserControl x:Class="MatroskaTagger.EditDate"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,9 +8,10 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <Label x:Name="label" Grid.Column="0" Content="Description:" VerticalAlignment="Center"/>
-    <TextBox x:Name="textBox" Grid.Column="1" MinWidth="30" MaxWidth="300" TextChanged="OnTextChanged" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+    <DatePicker x:Name="date" Grid.Column="1" VerticalAlignment="Center" SelectedDateChanged="OnSelectedDateChanged" />
   </Grid>
 </UserControl>

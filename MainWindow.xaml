@@ -22,6 +22,9 @@
       <TabItem Header="Custom MovieTag">
         <local:CustomMovieTag x:Name="customMovieTag"/>
       </TabItem>
+      <TabItem Header="Custom MusicVideoTag">
+        <local:CustomMusicVideoTag x:Name="customMusicVideoTag"/>
+      </TabItem>
     </TabControl>
   </Grid>
 </Window>

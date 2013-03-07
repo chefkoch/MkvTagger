@@ -4,38 +4,50 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
-             xmlns:local="clr-namespace:MatroskaTagger">
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
-    <WrapPanel Grid.Row="0">
-      <local:EditSortWith x:Name="movieName" Description="Movie Title: " TextChanged="UpdatePreview" VerticalAlignment="Bottom"/>
-      <local:EditSimple x:Name="imdbId" Description="IMDB-id:" TextChanged="UpdatePreview" VerticalAlignment="Bottom"/>
-    </WrapPanel>
-    <Grid Grid.Row="1">
+             d:DesignHeight="372" d:DesignWidth="845"
+             xmlns:local="clr-namespace:MatroskaTagger"
+             xmlns:avalonEdit="clr-namespace:ICSharpCode.AvalonEdit;assembly=ICSharpCode.AvalonEdit">
+  <UserControl.Resources>
+    <ResourceDictionary Source="Common.Styles.xaml"/>
+  </UserControl.Resources>
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Top" Margin="5">
+      <Label DockPanel.Dock="Left">FileName:</Label>
+      <TextBox x:Name="txtFilename" IsReadOnly="True" IsReadOnlyCaretVisible="True" Text="Empty tag file."/>
+    </DockPanel>
+    <DockPanel x:Name="dockXml" DockPanel.Dock="Top" Margin="5" Visibility="Collapsed">
+      <Label DockPanel.Dock="Left">XML-FileName:</Label>
+      <TextBox x:Name="txtXmlFilename" IsReadOnly="True" IsReadOnlyCaretVisible="True" />
+    </DockPanel>
+    <DockPanel DockPanel.Dock="Top" LastChildFill="False" 
+               HorizontalAlignment="Stretch" Width="Auto" 
+               Background="#FFF2F2F2">
+      <ToolBar x:Name="tbToolBar" DockPanel.Dock="Left" 
+               Background="{x:Null}">
+        <Button x:Name="saveButton" Click="SaveButton_OnClick" IsEnabled="False" ToolTip="Save">
+          Save
+        </Button>
+        <!--<Button ToolTip="Delete">
+                <Image Source="Delete.png"/>
+              </Button>-->
+      </ToolBar>
+    </DockPanel>
+    <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition/>
         <ColumnDefinition/>
+        <ColumnDefinition/>
       </Grid.ColumnDefinitions>
-      <GroupBox Grid.Column="0" Header="Original XML">
-        <avalonEdit:TextEditor xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-                                 Name="textEditorOriginal"
-                                 FontFamily="Consolas"
-                                 SyntaxHighlighting="XML"
-                                 FontSize="10pt"
-                                 MinWidth="150" />
+      <StackPanel Grid.Column="0">
+        <local:EditSortWith x:Name="movieName" Description="Movie Title: " TextChanged="UpdatePreview" VerticalAlignment="Bottom"/>
+        <local:EditSimple x:Name="imdbId" Description="IMDB-id:" TextChanged="UpdatePreview" VerticalAlignment="Bottom"/>
+      </StackPanel>
+      <GroupBox Grid.Column="1" Header="Original XML">
+        <avalonEdit:TextEditor Style="{StaticResource matroskaEditOld}" Name="textEditorOriginal" />
       </GroupBox>
-      <GroupBox Grid.Column="1" Header="New XML">
-        <avalonEdit:TextEditor xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-                                 Name="textEditorNew"
-                                 FontFamily="Consolas"
-                                 SyntaxHighlighting="XML"
-                                 FontSize="10pt"
-                                 MinWidth="150" />
+      <GroupBox Grid.Column="2" Header="New XML">
+        <avalonEdit:TextEditor Style="{StaticResource matroskaEdit}" Name="textEditorNew" />
       </GroupBox>
     </Grid>
-  </Grid>
+  </DockPanel>
 </UserControl>

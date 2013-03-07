@@ -42,7 +42,7 @@ namespace Matroska
       _matroskaTags = tags;
     }
 
-    public bool HasMovieTitle
+    public bool HasSeriesName
     {
       get { return !ReferenceEquals(SeriesName, null); }
     }

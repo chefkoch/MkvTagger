@@ -17,9 +17,9 @@ namespace MatroskaTagger
   /// <summary>
   /// Interaktionslogik für EditSimple.xaml
   /// </summary>
-  public partial class EditSortWith : UserControl
+  public partial class EditDate : UserControl
   {
-    public EditSortWith()
+    public EditDate()
     {
       InitializeComponent();
     }
@@ -28,8 +28,8 @@ namespace MatroskaTagger
 
     public string Description
     {
-      get { return group.Header as string; }
-      set { group.Header = value; }
+      get { return label.Content as string; }
+      set { label.Content = value; }
     }
 
     //public string Description
@@ -40,11 +40,11 @@ namespace MatroskaTagger
 
     //// Using a DependencyProperty as the backing store for Description.  This enables animation, styling, binding, etc...
     //public static readonly DependencyProperty DescriptionProperty =
-    //    DependencyProperty.Register("Description", typeof(string), typeof(EditSortWith), new PropertyMetadata("Description: ", DescriptionChanged));
+    //    DependencyProperty.Register("Description", typeof(string), typeof(EditSimple), new PropertyMetadata("Description: ", DescriptionChanged));
 
     //private static void DescriptionChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
     //{
-    //  EditSimple editSimple = (EditSortWith)dependencyObject;
+    //  EditSimple editSimple = (EditSimple)dependencyObject;
     //  editSimple.label.Content = dependencyPropertyChangedEventArgs.NewValue as string;
     //}
 
@@ -52,11 +52,17 @@ namespace MatroskaTagger
 
     #region Value
 
-    public string Value
+    public DateTime? Value
     {
-      get { return textBox.Text; }
-      set { textBox.Text = value; }
+      get { return date.SelectedDate; }
+      set { date.SelectedDate = value; }
     }
+
+    //public DateTime Value2
+    //{
+    //  get { return date.sel; }
+    //  set { textBox.Text = value; }
+    //}
 
     //public string Value
     //{
@@ -76,28 +82,17 @@ namespace MatroskaTagger
 
     #endregion Value
 
-    #region ValueSort
-
-    public string ValueSort
-    {
-      get { return textBoxSort.Text; }
-      set { textBoxSort.Text = value; }
-    }
-
-    #endregion ValueSort
-
     public void Clear()
     {
-      Value = string.Empty;
-      ValueSort = string.Empty;
-    }
-
-    private void OnTextChanged(object sender, TextChangedEventArgs e)
-    {
-      if (TextChanged != null)
-        TextChanged(this, e);
+      Value = null;
     }
 
     public event TextChangedEventHandler TextChanged;
+
+    private void OnSelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    {
+      if (TextChanged != null)
+        TextChanged(this, null);
+    }
   }
 }

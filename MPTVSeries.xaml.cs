@@ -419,23 +419,15 @@ namespace MatroskaTagger
         if (File.Exists(xmlFile))
           tag = MatroskaLoader.ReadTagFromXMLFile(xmlFile);
 
-        tag.Series.SeriesName.StringValue = args.Series[_episodes[file].SeriesID].Name;
-        tag.Series.SeriesName.SortWith = args.Series[_episodes[file].SeriesID].SortName;
-        tag.Series.SeasonIndex = args.Episodes[file].SeasonIndex;
-
+        tag.Series.SetTitle(args.Series[_episodes[file].SeriesID].Name);
         if (args.OptionalTagsToWrite.Contains(KEY_SERIES_SORTNAME))
-          tag.Series.EpisodeIndexList = args.Episodes[file].EpisodeIndexList.AsReadOnly();
+          tag.Series.SeriesName.SortWith = args.Series[_episodes[file].SeriesID].SortName;
+        tag.Series.SeasonIndex = args.Episodes[file].SeasonIndex;
+        tag.Series.EpisodeIndexList = args.Episodes[file].EpisodeIndexList.AsReadOnly();
 
-        if (File.Exists(xmlFile))
-        {
-          MatroskaLoader.WriteTagToXML(tag, xmlFile);
-          worker.ReportProgress(100*current/total, new FileBasedLogEntry(xmlFile, "XML updated: "));
-        }
-        else
-        {
-          MatroskaLoader.WriteTagToXML(tag, xmlFile);
-          worker.ReportProgress(100*current/total, new FileBasedLogEntry(xmlFile, "XML created: "));
-        }
+        string logText = File.Exists(xmlFile) ? "XML updated: " : "XML created: ";
+        MatroskaLoader.WriteTagToXML(tag, xmlFile);
+        worker.ReportProgress(100 * current / total, new FileBasedLogEntry(xmlFile, logText));
       }
     }
 

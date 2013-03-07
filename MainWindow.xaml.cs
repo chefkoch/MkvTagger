@@ -52,6 +52,7 @@ namespace MatroskaTagger
             // handle file
             customSeriesTag.SetFile(fileName);
             customMovieTag.SetFile(fileName);
+            customMusicVideoTag.SetFile(fileName);
           }
         }
       }

@@ -66,6 +66,12 @@
     <Compile Include="Controls\EditSortWith.xaml.cs">
       <DependentUpon>EditSortWith.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EditDate.xaml.cs">
+      <DependentUpon>EditDate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EditGenre.xaml.cs">
+      <DependentUpon>EditGenre.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomSeriesTag.xaml.cs">
       <DependentUpon>CustomSeriesTag.xaml</DependentUpon>
     </Compile>
@@ -75,7 +81,11 @@
     <Compile Include="Controls\EditSimple.xaml.cs">
       <DependentUpon>EditSimple.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomMusicVideoTag.xaml.cs">
+      <DependentUpon>CustomMusicVideoTag.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Matroska\Helpers\Actor.cs" />
+    <Compile Include="Matroska\Helpers\MusicVideoTag.cs" />
     <Compile Include="Matroska\Helpers\SortWithEntity.cs" />
     <Compile Include="Matroska\Simple.cs" />
     <Compile Include="Matroska\Targets.cs" />
@@ -89,6 +99,14 @@
     </Compile>
     <Compile Include="WpfExtensions\GridExpanderSizeBehavior.cs" />
     <Page Include="Controls\EditSortWith.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\EditDate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\EditGenre.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -107,6 +125,10 @@
     <Page Include="Controls\EditSimple.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomMusicVideoTag.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

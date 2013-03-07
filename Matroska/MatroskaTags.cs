@@ -45,6 +45,7 @@ namespace Matroska
       TagList = new List<Tag>();
       Series = new SeriesTag(this);
       Movie = new MovieTag(this);
+      MusicVideo = new MusicVideoTag(this);
     }
 
     #region tag interpreters
@@ -53,6 +54,8 @@ namespace Matroska
     public SeriesTag Series { get; set; }
     [XmlIgnore]
     public MovieTag Movie { get; set; }
+    [XmlIgnore]
+    public MusicVideoTag MusicVideo { get; set; }
 
     #endregion tag interpreters
 

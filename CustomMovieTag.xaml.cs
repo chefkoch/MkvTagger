@@ -32,13 +32,31 @@ namespace MatroskaTagger
       originalTag = MatroskaLoader.ReadTag(filepath);
       if (ReferenceEquals(originalTag, null))
       {
-        textEditorOriginal.Text = string.Empty;
         //clear textboxes
+        txtXmlFilename.Text = string.Empty;
+        dockXml.Visibility = Visibility.Collapsed;
+        txtFilename.Text = filepath;
+
+        textEditorOriginal.Text = string.Empty;
+        ClearGUI();
       }
+      else
       {
+        txtXmlFilename.Text = string.Empty;
+        dockXml.Visibility = Visibility.Collapsed;
+        txtFilename.Text = filepath;
+
         textEditorOriginal.Text = MatroskaLoader.GetXML(originalTag);
+        ClearGUI();
         UpdateGUI(originalTag);
       }
+      saveButton.IsEnabled = false;
+    }
+
+    private void ClearGUI()
+    {
+      movieName.Clear();
+      imdbId.Clear();
     }
 
     private void UpdateGUI(MatroskaTags tags)
@@ -75,8 +93,38 @@ namespace MatroskaTagger
       if (!string.IsNullOrEmpty(imdbId.Value))
         tag.Movie.IMDB_ID = imdbId.Value;
 
-      textEditorOriginal.Text = MatroskaLoader.GetXML(originalTag);
       textEditorNew.Text = MatroskaLoader.GetXML(tag);
+      saveButton.IsEnabled = true;
+    }
+
+    private void SaveButton_OnClick(object sender, RoutedEventArgs e)
+    {
+      MatroskaTags tags;
+
+      try
+      {
+        tags = MatroskaLoader.ReadTagFromXML(textEditorNew.Text);
+        if (tags == null)
+        {
+          MessageBox.Show("invalid tag file.");
+          return;
+        }
+      }
+      catch (Exception)
+      {
+        MessageBox.Show("invalid tag file.");
+        return;
+      }
+
+      MessageBoxResult result = MessageBox.Show("Do you really want to overwrite the old tags with the new ones?",
+                                                "Overwrite tags",
+                                                MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+      if (result == MessageBoxResult.Yes)
+      {
+        MatroskaLoader.WriteTags(tags, txtFilename.Text);
+        SetFile(txtFilename.Text);
+      }
     }
   }
 }

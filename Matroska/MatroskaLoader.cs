@@ -69,7 +69,11 @@ namespace Matroska
         return ReadTagFromMatroska(fileName);
 
       // Invalid file
-      throw new FileFormatException("File was not identified as XML or Matroska-file.");
+      string xmlFile = System.IO.Path.ChangeExtension(fileName, ".xml");
+      if (File.Exists(xmlFile))
+        return ReadTagFromXMLFile(xmlFile);
+
+      return new MatroskaTags();
     }
 
     public static MatroskaTags ReadTagFromXML(string serializedTags)
@@ -94,17 +98,20 @@ namespace Matroska
     public static MatroskaTags ReadTagFromXMLFile(string xmlFile)
     {
       MatroskaTags tags;
+      TextReader textReader = new StreamReader(xmlFile);
 
       try
       {
-        XmlSerializer deserializer = new XmlSerializer(typeof(MatroskaTags));
-        TextReader textReader = new StreamReader(xmlFile);
-        tags = (MatroskaTags)deserializer.Deserialize(textReader);
-        textReader.Close();
+        XmlSerializer deserializer = new XmlSerializer(typeof (MatroskaTags));
+        tags = (MatroskaTags) deserializer.Deserialize(textReader);
       }
       catch (Exception)
       {
-        return null;
+        tags = null;
+      }
+      finally
+      {
+        textReader.Close();
       }
 
       return tags;
@@ -127,7 +134,10 @@ namespace Matroska
       proc.WaitForExit();
 
       MatroskaTags result = ReadTagFromXMLFile(tempFile);
-      File.Delete(tempFile);
+
+      if (File.Exists(tempFile))
+        File.Delete(tempFile);
+
       return result;
     }
 
@@ -142,6 +152,37 @@ namespace Matroska
         serializer.Serialize(textWriter, tags, noNamespaces);
         textWriter.Close();
         return textWriter.ToString();
+      }
+    }
+
+    public static void WriteTags(MatroskaTags tags, string fileName)
+    {
+      if (string.IsNullOrEmpty(fileName))
+        throw new ArgumentNullException("fileName");
+      if (!File.Exists(fileName))
+        throw new FileNotFoundException("No file found for reading.", fileName);
+
+      //if (tagCache.ContainsKey(fileName))
+      //  return tagCache[fileName];
+
+      string extension = Path.GetExtension(fileName);
+      if (extension == null)
+        throw new FileFormatException("File was not identified as XML or Matroska-file.");
+
+      if (extension.ToLower().Equals(".xml"))
+      {
+        // XML file
+        WriteTagToXML(tags, fileName);
+      }
+      else if (MatroskaExtensions.Contains(extension.ToLower()))
+      {
+        // Matroska file
+        WriteTagToMatroska(fileName, tags);
+      }
+      else
+      {
+        // Invalid file
+        throw new FileFormatException("File was not identified as XML or Matroska-file.");
       }
     }
 
@@ -179,7 +220,7 @@ namespace Matroska
       string tempFile = Path.GetTempFileName();
 
       WriteTagToXML(tags, tempFile);
-      exitCode = WriteTagToMatroska(tempFile, matroskaFile);
+      exitCode = WriteTagToMatroska(matroskaFile, tempFile);
 
       File.Delete(tempFile);
 
