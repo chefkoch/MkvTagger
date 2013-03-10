@@ -11,18 +11,18 @@
   </UserControl.Resources>
   <DockPanel>
     <DockPanel DockPanel.Dock="Top" Margin="5">
-      <Label DockPanel.Dock="Left">FileName:</Label>
+      <Label DockPanel.Dock="Left">FileTitle:</Label>
       <TextBox x:Name="txtFilename" IsReadOnly="True" IsReadOnlyCaretVisible="True" Text="Empty tag file."/>
     </DockPanel>
     <DockPanel x:Name="dockXml" DockPanel.Dock="Top" Margin="5" Visibility="Collapsed">
-      <Label DockPanel.Dock="Left">XML-FileName:</Label>
+      <Label DockPanel.Dock="Left">XML-FileTitle:</Label>
       <TextBox x:Name="txtXmlFilename" IsReadOnly="True" IsReadOnlyCaretVisible="True" />
     </DockPanel>
     <DockPanel DockPanel.Dock="Top" LastChildFill="False" 
                HorizontalAlignment="Stretch" Width="Auto" 
                Background="#FFF2F2F2">
       <ToolBar x:Name="tbToolBar" DockPanel.Dock="Left">
-        <Button Click="refreshButton_OnClick">Refresh</Button>
+        <Button Click="refreshButton_OnClick" ToolTip="Reload tags from file">Refresh</Button>
         <Button x:Name="saveButton" Click="SaveButton_OnClick" IsEnabled="False" ToolTip="Save">
           Save
         </Button>

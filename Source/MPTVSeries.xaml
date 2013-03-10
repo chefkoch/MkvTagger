@@ -20,10 +20,6 @@
         <Setter Property="Content" Value="Start"/>
         <EventSetter Event="Click" Handler="DoStart"/>
       </Style>
-      <Style x:Key="BrowseButton" TargetType="Button">
-        <Setter Property="Content" Value="..."/>
-        <Setter Property="Width" Value="30"/>
-      </Style>
       <Style x:Key="myListBox" TargetType="ListBox">
         <EventSetter Event="SelectionChanged" Handler="listBox_SelectionChanged"/>
         <EventSetter Event="MouseDoubleClick" Handler="listBox_MouseDoubleClick"/>
@@ -77,16 +73,6 @@
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" Content="Path to TV-Series.db:" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBox x:Name="dbPath" Grid.Column="1" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-        <Button Grid.Column="2" Style="{StaticResource BrowseButton}" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BrowseDbPath"/>
-      </Grid>
-      <Grid DockPanel.Dock="Top">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
         <Label Grid.Column="0" Content="Folder with media files:" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TextBox x:Name="mediaPath" Grid.Column="1" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         <Button Grid.Column="2" Style="{StaticResource BrowseButton}" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BrowseMediaPath"/>
@@ -95,10 +81,10 @@
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
+          <!--<RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />-->
         </Grid.RowDefinitions>
-        <Expander Grid.Row="0" Header="1. Read Database">
+        <!--<Expander Grid.Row="0" Header="1. Read Database">
           <DockPanel>
             <Label DockPanel.Dock="Top">
               <TextBlock>
@@ -109,8 +95,8 @@
             <Button DockPanel.Dock="Top" x:Name="dbButton" Style="{StaticResource StartButton}"/>
             <ListBox x:Name="dbListBox" Style="{StaticResource myListBox}"/>
           </DockPanel>
-        </Expander>
-        <Expander Grid.Row="1" Header="2. Read tags from existing mkv-files">
+        </Expander>-->
+        <!--<Expander Grid.Row="1" Header="2. Read tags from existing mkv-files">
           <DockPanel>
             <Label DockPanel.Dock="Top" Style="{StaticResource warning}">
               This will replace any existing XML-Files, which have the same filename as the MKV-files.
@@ -123,25 +109,25 @@
             <Button DockPanel.Dock="Top" x:Name="readButton" Style="{StaticResource StartButton}"/>
             <ListBox x:Name="readListBox" Style="{StaticResource myListBox}"/>
           </DockPanel>
-        </Expander>
-        <Expander Grid.Row="2" Header="3. Write Episode Infos to XML-files">
+        </Expander>-->
+        <Expander Grid.Row="0" Header="Write Episode Infos to XML-files">
           <DockPanel>
             <Label DockPanel.Dock="Top" Style="{StaticResource warning}">
               This will modify existing XML-Files (create new if not) for every media file.
             </Label>
-            <GroupBox DockPanel.Dock="Top" Header="Select the meta data to be added/replaced:">
+            <!--<GroupBox DockPanel.Dock="Top" Header="Select the meta data to be added/replaced:">
               <WrapPanel>
-                <CheckBox Content="Series Name" Style="{StaticResource forcedCheck}"/>
+                <CheckBox Content="Series Title" Style="{StaticResource forcedCheck}"/>
                 <CheckBox Content="Season Index" Style="{StaticResource forcedCheck}"/>
                 <CheckBox Content="Episode Indizes" Style="{StaticResource forcedCheck}"/>
-                <CheckBox x:Name="seriesSortName" Content="Series SortName" Style="{StaticResource baseCheck}" IsChecked="True"/>
+                <CheckBox x:Name="seriesSortName" Content="Series SortTitle" Style="{StaticResource baseCheck}" IsChecked="True"/>
               </WrapPanel>
-            </GroupBox>
+            </GroupBox>-->
             <Button DockPanel.Dock="Top" x:Name="writeXmlTagButton" Style="{StaticResource StartButton}"/>
             <ListBox x:Name="writeXmlListBox" Style="{StaticResource myListBox}"/>
           </DockPanel>
         </Expander>
-        <Expander Grid.Row="3" Header="4. Write tags into existing mkv-files">
+        <Expander Grid.Row="1" Header="Write tags into existing mkv-files">
           <DockPanel>
             <Label DockPanel.Dock="Top">This writes the XML-Tag files back to existing MKV-Files without remuxing.</Label>
             <Label DockPanel.Dock="Top" Style="{StaticResource warning}">

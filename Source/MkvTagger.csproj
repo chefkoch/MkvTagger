@@ -7,12 +7,13 @@
     <ProjectGuid>{3C417313-160B-49C5-8BBE-3B2FA32AF990}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MatroskaTagger</RootNamespace>
-    <AssemblyName>MatroskaTagger</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>MkvTagger</RootNamespace>
+    <AssemblyName>MkvTagger</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -23,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.AvalonEdit">
@@ -63,6 +66,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Configuration.cs" />
+    <Compile Include="ViewModels\ConfigurationViewModel.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="Controls\EditSortWith.xaml.cs">
       <DependentUpon>EditSortWith.xaml</DependentUpon>
     </Compile>
@@ -84,6 +90,7 @@
     <Compile Include="CustomMusicVideoTag.xaml.cs">
       <DependentUpon>CustomMusicVideoTag.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataSources\MPTVSeriesImporter.cs" />
     <Compile Include="Matroska\Helpers\Actor.cs" />
     <Compile Include="Matroska\Helpers\MusicVideoTag.cs" />
     <Compile Include="Matroska\Helpers\SortWithEntity.cs" />
@@ -94,9 +101,19 @@
     <Compile Include="Matroska\MatroskaTags.cs" />
     <Compile Include="Matroska\Helpers\MovieTag.cs" />
     <Compile Include="Matroska\Helpers\SeriesTag.cs" />
+    <Compile Include="TagSetting.cs" />
     <Compile Include="Tips.xaml.cs">
       <DependentUpon>Tips.xaml</DependentUpon>
     </Compile>
+    <None Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </None>
+    <None Include="Views\Person.cs" />
+    <Compile Include="Views\ConfigurationView.xaml.cs">
+      <DependentUpon>ConfigurationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfExtensions\DelegateCommand.cs" />
+    <Compile Include="WpfExtensions\Extensions.cs" />
     <Compile Include="WpfExtensions\GridExpanderSizeBehavior.cs" />
     <Page Include="Controls\EditSortWith.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -151,6 +168,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <None Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <Page Include="Views\ConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MPTVSeries.xaml.cs">
@@ -176,6 +201,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <Resource Include="Matroska\matroskatags.dtd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

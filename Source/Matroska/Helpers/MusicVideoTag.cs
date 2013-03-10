@@ -283,12 +283,12 @@ namespace Matroska
     //  //               Label = (string)item.Element("label"),
     //  //               Description = (string)item.Element("description"),
     //  //               Id = (int)FindParameter(item, "id"),
-    //  //               Name = (string)FindParameter(item, "name"),
+    //  //               Title = (string)FindParameter(item, "name"),
     //  //               Zip = (string)FindParameter(item, "zip")
     //  //             };
     //}
 
-    //public string Name
+    //public string Title
     //{
     //  get
     //  {
@@ -297,7 +297,7 @@ namespace Matroska
     //    //       Label = (string) item.Element("label"),
     //    //       Description = (string) item.Element("description"),
     //    //       Id = (int) FindParameter(item, "id"),
-    //    //       Name = (string) FindParameter(item, "name"),
+    //    //       Title = (string) FindParameter(item, "name"),
     //    //       Zip = (string) FindParameter(item, "zip")
     //    //   };
 

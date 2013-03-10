@@ -42,6 +42,8 @@ namespace Matroska
       _matroskaTags = tags;
     }
 
+    #region Recommended for Identification
+
     public bool HasSeriesName
     {
       get { return !ReferenceEquals(SeriesName, null); }
@@ -53,8 +55,8 @@ namespace Matroska
       {
         try
         {
-          Tag movieTag = _matroskaTags.GetTag(70);
-          return new SortWithEntity(movieTag.GetSimple("TITLE"));
+          Tag seriesTag = _matroskaTags.GetTag(70);
+          return new SortWithEntity(seriesTag.GetSimple("TITLE"));
         }
         catch (Exception)
         {
@@ -65,9 +67,32 @@ namespace Matroska
 
     public void SetTitle(string titleValue)
     {
-      Tag movieTag = _matroskaTags.GetOrAddTag(70);
-      Simple titleSimple = movieTag.GetOrAddSimple("TITLE");
+      Tag seriesTag = _matroskaTags.GetOrAddTag(70);
+      Simple titleSimple = seriesTag.GetOrAddSimple("TITLE");
       titleSimple.StringValue = titleValue;
+    }
+
+    public string IMDB_ID
+    {
+      get
+      {
+        try
+        {
+          Tag seriesTag = _matroskaTags.GetTag(70);
+          Simple imdbSimple = seriesTag.GetSimple("IMDB");
+          return imdbSimple.StringValue;
+        }
+        catch (Exception)
+        {
+          return null;
+        }
+      }
+      set
+      {
+        Tag seriesTag = _matroskaTags.GetOrAddTag(70);
+        Simple imdbSimple = seriesTag.GetOrAddSimple("IMDB");
+        imdbSimple.StringValue = value;
+      }
     }
 
     public int? SeasonIndex
@@ -102,7 +127,7 @@ namespace Matroska
         Tag episodetag = _matroskaTags.GetTag(50);
         if (ReferenceEquals(episodetag, null)) return result.AsReadOnly();
 
-        foreach (Simple indexSimple in episodetag.Simples.Where(s => s.Name =="PART_NUMBER"))
+        foreach (Simple indexSimple in episodetag.Simples.Where(s => s.Name == "PART_NUMBER"))
         {
           try
           {
@@ -127,9 +152,122 @@ namespace Matroska
       }
     }
 
+    public string EpisodeFirstAired
+    {
+      get
+      {
+        try
+        {
+          Tag episodetag = _matroskaTags.GetTag(50);
+          Simple dateSimple = episodetag.GetSimple("DATE_RELEASED");
+          return dateSimple.StringValue;
+        }
+        catch (Exception)
+        {
+          return null;
+        }
+      }
+      set
+      {
+        Tag episodetag = _matroskaTags.GetOrAddTag(50);
+        Simple dateSimple = episodetag.GetOrAddSimple("DATE_RELEASED");
+        dateSimple.StringValue = value;
+      }
+    }
+
+    #endregion
+
+    #region Additional Series Tags
+
+    public string SeriesFirstAired
+    {
+      get
+      {
+        try
+        {
+          Tag seriesTag = _matroskaTags.GetTag(70);
+          Simple dateSimple = seriesTag.GetSimple("DATE_RELEASED");
+          return dateSimple.StringValue;
+        }
+        catch (Exception)
+        {
+          return null;
+        }
+      }
+      set
+      {
+        Tag seriesTag = _matroskaTags.GetOrAddTag(70);
+        Simple dateSimple = seriesTag.GetOrAddSimple("DATE_RELEASED");
+        dateSimple.StringValue = value;
+      }
+    }
+
+    public ReadOnlyCollection<string> SeriesGenreList
+    {
+      get
+      {
+        List<string> result = new List<string>();
+
+        Tag seriesTag = _matroskaTags.GetTag(70);
+        if (ReferenceEquals(seriesTag, null)) return result.AsReadOnly();
+
+        foreach (Simple genreSimple in seriesTag.Simples.Where(s => s.Name == "GENRE"))
+        {
+          try
+          {
+            result.Add(genreSimple.StringValue);
+          }
+          catch
+          {
+          }
+        }
+
+        return result.AsReadOnly();
+      }
+      set
+      {
+        Tag seriesTag = _matroskaTags.GetOrAddTag(70);
+        seriesTag.Simples.RemoveAll(s => s.Name == "GENRE");
+        foreach (string s in value)
+        {
+          Simple genreSimple = new Simple("GENRE", s);
+          seriesTag.Simples.Add(genreSimple);
+        }
+      }
+    }
+
+    #endregion
+
+    #region Additional Episode Tags
+
+    public string EpisodeTitle
+    {
+      get
+      {
+        try
+        {
+          Tag episodetag = _matroskaTags.GetTag(50);
+          Simple titleSimple = episodetag.GetSimple("TITLE");
+          return titleSimple.StringValue;
+        }
+        catch (Exception)
+        {
+          return null;
+        }
+      }
+      set
+      {
+        Tag episodetag = _matroskaTags.GetOrAddTag(50);
+        Simple titleSimple = episodetag.GetOrAddSimple("TITLE");
+        titleSimple.StringValue = value;
+      }
+    }
+
+    #endregion
+
     public override string ToString()
     {
-      return String.Format("{0}|{1}|{2}", SeriesName, SeasonIndex, string.Join("|", EpisodeIndexList));
+      return String.Format("{0}|{1}|{2}|{3}|{4}", SeriesName, IMDB_ID, SeasonIndex, string.Join("|", EpisodeIndexList), EpisodeFirstAired);
     }
 
     //public void Test()
@@ -147,12 +285,12 @@ namespace Matroska
     //  //               Label = (string)item.Element("label"),
     //  //               Description = (string)item.Element("description"),
     //  //               Id = (int)FindParameter(item, "id"),
-    //  //               Name = (string)FindParameter(item, "name"),
+    //  //               Title = (string)FindParameter(item, "name"),
     //  //               Zip = (string)FindParameter(item, "zip")
     //  //             };
     //}
 
-    //public string Name
+    //public string Title
     //{
     //  get
     //  {
@@ -161,7 +299,7 @@ namespace Matroska
     //    //       Label = (string) item.Element("label"),
     //    //       Description = (string) item.Element("description"),
     //    //       Id = (int) FindParameter(item, "id"),
-    //    //       Name = (string) FindParameter(item, "name"),
+    //    //       Title = (string) FindParameter(item, "name"),
     //    //       Zip = (string) FindParameter(item, "zip")
     //    //   };
 

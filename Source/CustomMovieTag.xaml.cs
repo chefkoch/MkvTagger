@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -16,11 +17,11 @@ using Matroska;
 namespace MatroskaTagger
 {
   /// <summary>
-  /// Interaktionslogik für CustomSeriesTag.xaml
+  /// Interaktionslogik für CustomMoviesTag.xaml
   /// </summary>
-  public partial class CustomSeriesTag : UserControl
+  public partial class CustomMovieTag : UserControl
   {
-    public CustomSeriesTag()
+    public CustomMovieTag()
     {
       InitializeComponent();
     }
@@ -55,26 +56,20 @@ namespace MatroskaTagger
 
     private void ClearGUI()
     {
-      seriesName.Clear();
-      seasonIndex.Clear();
-#warning clear ep index
+      movieName.Clear();
+      imdbId.Clear();
     }
 
     private void UpdateGUI(MatroskaTags tags)
     {
-      if (tags.Series.HasSeriesName)
-        seriesName.Value = tags.Series.SeriesName.StringValue;
+      if (tags.Movie.HasMovieTitle)
+        movieName.Value = tags.Movie.MovieTitle.StringValue;
 
-      if (tags.Series.HasSeriesName && !string.IsNullOrEmpty(tags.Series.SeriesName.SortWith))
-        seriesName.ValueSort = tags.Series.SeriesName.SortWith;
+      if (tags.Movie.HasMovieTitle && !string.IsNullOrEmpty(tags.Movie.MovieTitle.SortWith))
+        movieName.ValueSort = tags.Movie.MovieTitle.SortWith;
 
-      if (!ReferenceEquals(tags.Series.SeasonIndex, null))
-        seasonIndex.Value = tags.Series.SeasonIndex.ToString();
-
-      if (tags.Series.EpisodeIndexList.Count > 0)
-      {
-        episodeIndexList.Text = String.Join(",", tags.Series.EpisodeIndexList);
-      }
+      if (!string.IsNullOrEmpty(tags.Movie.IMDB_ID))
+        imdbId.Value = tags.Movie.IMDB_ID;
     }
 
     private void UpdatePreview(object sender, TextChangedEventArgs e)
@@ -88,37 +83,26 @@ namespace MatroskaTagger
       else
         tag = new MatroskaTags();
 
-      if (!string.IsNullOrEmpty(seriesName.Value))
-      {
-        tag.Series.SetTitle(seriesName.Value);
-
-        if (!string.IsNullOrEmpty(seriesName.ValueSort))
-          tag.Series.SeriesName.SortWith = seriesName.ValueSort;
-      }
-
-      if (!string.IsNullOrEmpty(seasonIndex.Value))
-      {
-        int index;
-        if (int.TryParse(seasonIndex.Value, out index))
-          tag.Series.SeasonIndex = index;
-      }
-
-      if (!string.IsNullOrEmpty(episodeIndexList.Text))
-      {
-        List<int> indexList = new List<int>();
-        foreach (string s in episodeIndexList.Text.Split(','))
-        {
-          int index;
-          if (int.TryParse(s, out index))
-            indexList.Add(index);
-        }
-
-        if (indexList.Count > 0)
-          tag.Series.EpisodeIndexList = indexList.AsReadOnly();
-      }
+      tag.Movie = UpdateTagFromGUI(tag.Movie);
 
       textEditorNew.Text = MatroskaLoader.GetXML(tag);
       saveButton.IsEnabled = true;
+    }
+
+    private MovieTag UpdateTagFromGUI(MovieTag tag)
+    {
+      if (!string.IsNullOrEmpty(movieName.Value))
+      {
+        tag.SetTitle(movieName.Value);
+
+        if (!string.IsNullOrEmpty(movieName.ValueSort))
+          tag.MovieTitle.SortWith = movieName.ValueSort;
+      }
+
+      if (!string.IsNullOrEmpty(imdbId.Value))
+        tag.IMDB_ID = imdbId.Value;
+
+      return tag;
     }
 
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
@@ -149,6 +133,14 @@ namespace MatroskaTagger
         MatroskaLoader.WriteTags(tags, txtFilename.Text);
         SetFile(txtFilename.Text);
       }
+    }
+
+    private void refreshButton_OnClick(object sender, RoutedEventArgs e)
+    {
+      if (string.IsNullOrWhiteSpace(txtFilename.Text)) return;
+      if (!File.Exists(txtFilename.Text)) return;
+
+      SetFile(txtFilename.Text);
     }
   }
 }

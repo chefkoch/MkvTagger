@@ -159,8 +159,6 @@ namespace Matroska
     {
       if (string.IsNullOrEmpty(fileName))
         throw new ArgumentNullException("fileName");
-      if (!File.Exists(fileName))
-        throw new FileNotFoundException("No file found for reading.", fileName);
 
       //if (tagCache.ContainsKey(fileName))
       //  return tagCache[fileName];
@@ -182,7 +180,9 @@ namespace Matroska
       else
       {
         // Invalid file
-        throw new FileFormatException("File was not identified as XML or Matroska-file.");
+        //throw new FileFormatException("File was not identified as XML or Matroska-file.");
+        fileName = Path.ChangeExtension(fileName, ".xml");
+        WriteTagToXML(tags,fileName);
       }
     }
 

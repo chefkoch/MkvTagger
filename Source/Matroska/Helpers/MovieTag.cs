@@ -77,8 +77,8 @@ namespace Matroska
         try
         {
           Tag movieTag = _matroskaTags.GetTag(50);
-          Simple titleSimple = movieTag.GetSimple("IMDB");
-          return titleSimple.StringValue;
+          Simple imdbSimple = movieTag.GetSimple("IMDB");
+          return imdbSimple.StringValue;
         }
         catch (Exception)
         {
@@ -88,8 +88,8 @@ namespace Matroska
       set
       {
         Tag movieTag = _matroskaTags.GetOrAddTag(50);
-        Simple titleSimple = movieTag.GetOrAddSimple("IMDB");
-        titleSimple.StringValue = value;
+        Simple imdbSimple = movieTag.GetOrAddSimple("IMDB");
+        imdbSimple.StringValue = value;
       }
     }
 
