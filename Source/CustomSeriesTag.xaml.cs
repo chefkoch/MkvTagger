@@ -14,6 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Matroska;
 using MatroskaTagger.DataSources;
+using MediaPortal.OnlineLibraries.TheTvDb;
+using MediaPortal.OnlineLibraries.TheTvDb.Data;
+using MkvTagger;
 
 namespace MatroskaTagger
 {
@@ -22,12 +25,15 @@ namespace MatroskaTagger
   /// </summary>
   public partial class CustomSeriesTag : UserControl
   {
+    private MatroskaTags originalTag;
+    private TvdbHandler TVDB = null;
+
+    private const string API_KEY = "91A89A984264307A";
+
     public CustomSeriesTag()
     {
       InitializeComponent();
     }
-
-    private MatroskaTags originalTag;
 
     public void SetFile(string filepath)
     {
@@ -236,6 +242,90 @@ namespace MatroskaTagger
 
       // additional episode
       episodeTitle.Value = ep.EpisodeName;
+    }
+
+    private void thetvdb_OnClick(object sender, RoutedEventArgs e)
+    {
+      if (TVDB == null)
+        TVDB = new TvdbHandler(API_KEY);
+
+      string imdb = seriesIMDB.Value;
+      string name = seriesTitle.Value;
+      if (string.IsNullOrEmpty(imdb) && string.IsNullOrEmpty(name))
+      {
+        MessageBox.Show("TvDb lookup needs atleast IMDB id or series name.");
+        return;
+      }
+
+      int iSeason;
+      int iEpisode;
+      if (!int.TryParse(seasonIndex.Value, out iSeason) || !int.TryParse(episodeIndexList.Value, out iEpisode))
+      {
+        MessageBox.Show("TvDb lookup needs season & episode index.");
+        return;
+      }
+
+      if (!string.IsNullOrEmpty(imdb))
+        SetSeriesFromTVDB(imdb, iSeason, iEpisode, true);
+      else
+        SetSeriesFromTVDB(name, iSeason, iEpisode);
+
+    }
+
+    private void SetSeriesFromTVDB(string idOrName, int season, int episode, bool stringIsIMDB = false)
+    {
+      TvdbSearchResult result;
+      if (stringIsIMDB)
+      {
+        try
+        {
+          result = TVDB.GetSeriesByRemoteId(ExternalId.ImdbId, idOrName);
+          if (result == null)
+            return;
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show("An error occured: " + ex.Message);
+          return;
+        }
+
+      }
+      else
+      {
+        try
+        {
+          var list = TVDB.SearchSeries(idOrName);
+          if (list.Count ==0)
+          {
+            MessageBox.Show("nothing found");
+            return;
+          }
+
+          int iResult;
+          if (list.Count > 1)
+          {
+            SearchResult w = new SearchResult();
+            w.SetItemSource(list);
+            w.ShowDialog();
+            iResult = w.SelectedIndex;
+          }
+          else
+            iResult = 0;
+
+          if (iResult<0)
+            return;
+
+          result = list[iResult];
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show("An error occured: " + ex.Message);
+          return;
+        }
+      }
+
+      seriesTitle.Value = result.SeriesName;
+      seriesFirstAired.Value = result.FirstAired.ToString("yyyy-MM-dd");
     }
   }
 }

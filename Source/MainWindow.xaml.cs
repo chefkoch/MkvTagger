@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Serialization;
 using Matroska;
+using MediaPortal.OnlineLibraries.TheTvDb.Data;
 using Path = System.IO.Path;
 
 namespace MatroskaTagger

@@ -1,0 +1,12 @@
+﻿<Window x:Class="MkvTagger.SearchResult"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SearchResult" Height="458" Width="731">
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Top">
+      <Button DockPanel.Dock="Right" Width="100" Click="Button_Click">OK</Button>
+      <Label>Select your result and press OK:</Label>
+    </DockPanel>
+    <DataGrid x:Name="_grid"/>
+  </DockPanel>
+</Window>

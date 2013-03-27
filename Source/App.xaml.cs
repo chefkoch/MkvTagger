@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using Matroska;
+using MediaPortal.OnlineLibraries.TheTvDb;
 
 namespace MatroskaTagger
 {
@@ -17,6 +18,8 @@ namespace MatroskaTagger
   public partial class App : Application
   {
     public static Configuration Config { get; set; }
+
+    private TvdbHandler handler;
 
     private void Application_Startup(object sender, StartupEventArgs e)
     {

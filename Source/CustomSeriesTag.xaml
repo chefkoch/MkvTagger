@@ -28,6 +28,7 @@
           Save
         </Button>
         <Button Click="mpTVSeries_OnClick">MP-TVSeries</Button>
+        <Button Click="thetvdb_OnClick">TheTvDB</Button>
         <!--<Button ToolTip="Delete">
                 <Image Source="Delete.png"/>
               </Button>-->
