@@ -14,9 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Matroska;
 using MatroskaTagger.DataSources;
-using MediaPortal.OnlineLibraries.TheTvDb;
-using MediaPortal.OnlineLibraries.TheTvDb.Data;
-using MkvTagger;
 
 namespace MatroskaTagger
 {
@@ -26,9 +23,6 @@ namespace MatroskaTagger
   public partial class CustomSeriesTag : UserControl
   {
     private MatroskaTags originalTag;
-    private TvdbHandler TVDB = null;
-
-    private const string API_KEY = "91A89A984264307A";
 
     public CustomSeriesTag()
     {
@@ -62,17 +56,26 @@ namespace MatroskaTagger
 
     private void ClearGUI()
     {
+      // Recommended for identification
       seriesTitle.Clear();
       seriesIMDB.Clear();
+      seriesTVDB.Clear();
       seasonIndex.Clear();
       episodeIndexList.Clear();
       episodeAired.Clear();
 
-      seriesTitleSort.Clear();
+      // additional series infos
       seriesFirstAired.Clear();
+      seriesSummary.Clear();
       seriesGenre.Clear();
-
+      seriesActors.Clear();
+      // additional episode infos
+      episodeIMDB.Clear();
       episodeTitle.Clear();
+      episodeSummary.Clear();
+      GuestStars.Clear();
+      Directors.Clear();
+      Writers.Clear();
     }
 
     private void UpdateGUI(SeriesTag tag = null)
@@ -80,45 +83,31 @@ namespace MatroskaTagger
       ClearGUI();
       if (ReferenceEquals(tag, null)) return;
 
-      if (tag.HasSeriesName)
-      {
-        seriesTitle.Value = tag.SeriesName.StringValue;
+      // Recommended for identification
+      seriesTitle.Value = tag.SeriesName;
+      seriesIMDB.Value = tag.IMDB_ID;
+      seriesTVDB.Value = tag.TVDB_ID;
+      seasonIndex.Value = tag.SeasonIndex;
+      episodeIndexList.Value = tag.EpisodeIndexList;
+      episodeAired.Value = tag.EpisodeFirstAired;
 
-        if (!string.IsNullOrEmpty(tag.SeriesName.SortWith))
-          seriesTitleSort.Value = tag.SeriesName.SortWith;
-      }
-
-      if (!string.IsNullOrEmpty(tag.IMDB_ID))
-        seriesIMDB.Value = tag.IMDB_ID;
-
-      if (!ReferenceEquals(tag.SeasonIndex, null))
-        seasonIndex.Value = tag.SeasonIndex.ToString();
-
-      if (tag.EpisodeIndexList.Count > 0)
-        episodeIndexList.Value = String.Join(",", tag.EpisodeIndexList);
-
-      if (!string.IsNullOrEmpty(tag.EpisodeFirstAired))
-        episodeAired.Value = tag.EpisodeFirstAired;
-
-
-      if (!string.IsNullOrEmpty(tag.SeriesFirstAired))
-        seriesFirstAired.Value = tag.SeriesFirstAired;
+      // additional series infos
+      seriesFirstAired.Value = tag.SeriesFirstAired;
+      seriesSummary.Value = tag.SeriesOverview;
       seriesGenre.Value = tag.SeriesGenreList;
-      if (!string.IsNullOrEmpty(tag.EpisodeTitle))
-        episodeTitle.Value = tag.EpisodeTitle;
-
+      seriesActors.Value = tag.SeriesActors;
+      // additional episode infos
+      episodeIMDB.Value = tag.EpisodeIMDB_ID;
+      episodeTitle.Value = tag.EpisodeTitle;
+      episodeSummary.Value = tag.EpisodeOverview;
+      GuestStars.Value = tag.GuestStars;
+      Directors.Value = tag.Directors;
+      Writers.Value = tag.Writers;
     }
 
     private void UpdatePreview(object sender, TextChangedEventArgs e)
     {
-      MatroskaTags tag;
-      if (!ReferenceEquals(originalTag, null))
-      {
-        string xmlString = MatroskaLoader.GetXML(originalTag);
-        tag = MatroskaLoader.ReadTagFromXML(xmlString);
-      }
-      else
-        tag = new MatroskaTags();
+      MatroskaTags tag = MatroskaLoader.Clone(originalTag);
 
       tag.Series = UpdateTagFromGUI(tag.Series);
 
@@ -128,44 +117,26 @@ namespace MatroskaTagger
 
     private SeriesTag UpdateTagFromGUI(SeriesTag tag)
     {
-      if (!string.IsNullOrEmpty(seriesTitle.Value))
-      {
-        tag.SetTitle(seriesTitle.Value);
+      // Recommended for identification
+      tag.SeriesName = seriesTitle.Value;
+      tag.IMDB_ID = seriesIMDB.Value;
+      tag.TVDB_ID = seriesTVDB.Value;
+      tag.SeasonIndex = seasonIndex.Value;
+      tag.EpisodeIndexList = episodeIndexList.Value;
+      tag.EpisodeFirstAired = episodeAired.Value;
 
-        if (!string.IsNullOrEmpty(seriesTitleSort.Value))
-          tag.SeriesName.SortWith = seriesTitleSort.Value;
-      }
-
-      if (!string.IsNullOrEmpty(seriesIMDB.Value))
-        tag.IMDB_ID = seriesIMDB.Value;
-
-      if (!string.IsNullOrEmpty(seasonIndex.Value))
-      {
-        int index;
-        if (int.TryParse(seasonIndex.Value, out index))
-          tag.SeasonIndex = index;
-      }
-
-      if (!string.IsNullOrEmpty(episodeIndexList.Value))
-      {
-        List<int> indexList = new List<int>();
-        foreach (string s in episodeIndexList.Value.Split(','))
-        {
-          int index;
-          if (int.TryParse(s, out index))
-            indexList.Add(index);
-        }
-
-        if (indexList.Count > 0)
-          tag.EpisodeIndexList = indexList.AsReadOnly();
-      }
-
-      if (!string.IsNullOrEmpty(episodeAired.Value))
-        tag.EpisodeFirstAired = episodeAired.Value;
-
-      tag.SeriesGenreList = seriesGenre.Value;
+      // additional series infos
       tag.SeriesFirstAired = seriesFirstAired.Value;
+      tag.SeriesOverview = seriesSummary.Value;
+      tag.SeriesGenreList = seriesGenre.Value;
+      tag.SeriesActors = seriesActors.Value;
+      // additional episode infos
+      tag.EpisodeIMDB_ID = episodeIMDB.Value;
       tag.EpisodeTitle = episodeTitle.Value;
+      tag.EpisodeOverview = episodeSummary.Value;
+      tag.GuestStars = GuestStars.Value;
+      tag.Directors = Directors.Value;
+      tag.Writers = Writers.Value;
 
       return tag;
     }
@@ -213,119 +184,47 @@ namespace MatroskaTagger
       if (string.IsNullOrWhiteSpace(txtFilename.Text)) return;
       if (!File.Exists(txtFilename.Text)) return;
 
-      Episode ep = null;
+      // Use original tags as base with latest changes from GUI
+      MatroskaTags tag = MatroskaLoader.Clone(originalTag);
+      tag.Series = UpdateTagFromGUI(tag.Series);
+
+      // Update from TVSeries
       try
       {
-        MPTVSeriesImporter i = new MPTVSeriesImporter();
-        ep = i.GetEpisodeInfo(txtFilename.Text);
+        MPTVSeriesImporter importer = new MPTVSeriesImporter();
+        tag.Series = importer.UpdateTags(tag.Series, txtFilename.Text);
       }
       catch (Exception ex)
       {
         MessageBox.Show(ex.Message);
         return;
       }
-      
-      if (ep == null)
-        return;
 
-      // recommend
-      seriesTitle.Value = ep.SeriesInfo.Title;
-      seriesIMDB.Value = ep.SeriesInfo.IMDB_ID;
-      seasonIndex.Value = ep.SeasonIndex.ToString();
-      episodeIndexList.Value = String.Join(",", ep.EpisodeIndexList);
-      episodeAired.Value = ep.FirstAired;
-
-      // addition series
-      seriesTitleSort.Value = ep.SeriesInfo.TitleSort;
-      seriesFirstAired.Value = ep.SeriesInfo.FirstAired;
-      seriesGenre.Value = ep.SeriesInfo.Genre.AsReadOnly();
-
-      // additional episode
-      episodeTitle.Value = ep.EpisodeName;
+      UpdateGUI(tag.Series);
     }
 
     private void thetvdb_OnClick(object sender, RoutedEventArgs e)
     {
-      if (TVDB == null)
-        TVDB = new TvdbHandler(API_KEY);
+      if (string.IsNullOrWhiteSpace(txtFilename.Text)) return;
+      if (!File.Exists(txtFilename.Text)) return;
 
-      string imdb = seriesIMDB.Value;
-      string name = seriesTitle.Value;
-      if (string.IsNullOrEmpty(imdb) && string.IsNullOrEmpty(name))
+      // Use original tags as base with latest changes from GUI
+      MatroskaTags tag = MatroskaLoader.Clone(originalTag);
+      tag.Series = UpdateTagFromGUI(tag.Series);
+
+      // Update from TVSeries
+      try
       {
-        MessageBox.Show("TvDb lookup needs atleast IMDB id or series name.");
+        TheTvDbImporter importer = new TheTvDbImporter();
+        tag.Series = importer.UpdateTags(tag.Series);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show(ex.Message);
         return;
       }
 
-      int iSeason;
-      int iEpisode;
-      if (!int.TryParse(seasonIndex.Value, out iSeason) || !int.TryParse(episodeIndexList.Value, out iEpisode))
-      {
-        MessageBox.Show("TvDb lookup needs season & episode index.");
-        return;
-      }
-
-      if (!string.IsNullOrEmpty(imdb))
-        SetSeriesFromTVDB(imdb, iSeason, iEpisode, true);
-      else
-        SetSeriesFromTVDB(name, iSeason, iEpisode);
-
-    }
-
-    private void SetSeriesFromTVDB(string idOrName, int season, int episode, bool stringIsIMDB = false)
-    {
-      TvdbSearchResult result;
-      if (stringIsIMDB)
-      {
-        try
-        {
-          result = TVDB.GetSeriesByRemoteId(ExternalId.ImdbId, idOrName);
-          if (result == null)
-            return;
-        }
-        catch (Exception ex)
-        {
-          MessageBox.Show("An error occured: " + ex.Message);
-          return;
-        }
-
-      }
-      else
-      {
-        try
-        {
-          var list = TVDB.SearchSeries(idOrName);
-          if (list.Count ==0)
-          {
-            MessageBox.Show("nothing found");
-            return;
-          }
-
-          int iResult;
-          if (list.Count > 1)
-          {
-            SearchResult w = new SearchResult();
-            w.SetItemSource(list);
-            w.ShowDialog();
-            iResult = w.SelectedIndex;
-          }
-          else
-            iResult = 0;
-
-          if (iResult<0)
-            return;
-
-          result = list[iResult];
-        }
-        catch (Exception ex)
-        {
-          MessageBox.Show("An error occured: " + ex.Message);
-          return;
-        }
-      }
-
-      seriesTitle.Value = result.SeriesName;
-      seriesFirstAired.Value = result.FirstAired.ToString("yyyy-MM-dd");
+      UpdateGUI(tag.Series);
     }
   }
 }

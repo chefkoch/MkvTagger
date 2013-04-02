@@ -16,21 +16,32 @@
     </ResourceDictionary>
   </UserControl.Resources>
   <DockPanel DataContext="{Binding Source={StaticResource config}}">
-    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+    <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
       <Button Content="Load" Margin="5" Command="{Binding LoadSettingsCommand}"/>
       <Button Content="Save" Margin="5" Command="{Binding SaveSettingsCommand}"/>
-    </StackPanel>
-    <Grid DockPanel.Dock="Top">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-      </Grid.ColumnDefinitions>
-      <Label Grid.Column="0" Content="Path to TV-Series.db:" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-      <TextBox Grid.Column="1" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding MPTVSeriesDatabasePath,Mode=TwoWay}"/>
-      <Button Grid.Column="2" Style="{StaticResource BrowseButton}" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding BrowseTvSeriesDbCommand}"/>
-    </Grid>
-    <DataGrid ItemsSource="{Binding OptionalSeriesTags}">
-    </DataGrid>
+    </StackPanel>-->
+    <DockPanel>
+      <Grid DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="Path to TV-Series.db:" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding MPTVSeriesDatabasePath,Mode=TwoWay}"/>
+        <Button Grid.Column="2" Style="{StaticResource BrowseButton}" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding BrowseTvSeriesDbCommand}"/>
+      </Grid>
+      <Grid DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="Language for TheTvDb data:" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ComboBox Grid.Column="1" SelectedValue="{Binding SelectedTvDbLanguage,Mode=TwoWay}" ItemsSource="{Binding AvailableTvDbLanguages}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+      </Grid>
+      <DataGrid/>
+      <!--<DataGrid ItemsSource="{Binding OptionalSeriesTags}">
+    </DataGrid>-->
+    </DockPanel>
   </DockPanel>
 </UserControl>

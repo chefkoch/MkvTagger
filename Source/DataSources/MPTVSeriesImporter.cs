@@ -92,7 +92,28 @@ namespace MatroskaTagger.DataSources
     //  return series;
     //}
 
-    public Episode GetEpisodeInfo(string filename)
+    public SeriesTag UpdateTags(SeriesTag seriesTag, string filename)
+    {
+      Episode ep = null;
+      try
+      {
+        MPTVSeriesImporter i = new MPTVSeriesImporter();
+        ep = i.GetEpisodeInfo(filename);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show(ex.Message);
+        return seriesTag;
+      }
+
+      if (ep == null)
+        return seriesTag;
+
+      return CopyEpisodeToTag(seriesTag, ep);
+    }
+
+
+    private Episode GetEpisodeInfo(string filename)
     {
       if (connection == null)
         OpenConnection();
@@ -156,11 +177,11 @@ namespace MatroskaTagger.DataSources
       ep.EpisodeIndexList.Clear();
       int index = Int32.Parse(reader["EpisodeIndex"].ToString());
       if (index != 0)
-        ep.EpisodeIndexList.Add(index);
+        ep.EpisodeIndexList.Add(index.ToString());
 
       index = Int32.Parse(reader["EpisodeIndex2"].ToString());
       if (index != 0)
-        ep.EpisodeIndexList.Add(index);
+        ep.EpisodeIndexList.Add(index.ToString());
 
       return ep;
     }
@@ -171,6 +192,7 @@ namespace MatroskaTagger.DataSources
 
       ep.EpisodeName = reader["EpisodeName"].ToString();
       ep.Summary = reader["Summary"].ToString();
+      ep.IMDB_ID = reader["IMDB_ID"].ToString();
 
       ep.GuestStars = SplitText(reader["GuestStars"].ToString());
       ep.Directors = SplitText(reader["Director"].ToString());
@@ -186,6 +208,7 @@ namespace MatroskaTagger.DataSources
       s.IMDB_ID = reader["IMDB_ID"].ToString();
 
       s.TitleSort = reader["SortName"].ToString();
+      s.Network = reader["Network"].ToString();
       s.Summary = reader["Summary"].ToString();
       s.FirstAired = reader["FirstAired"].ToString();
 
@@ -237,107 +260,138 @@ namespace MatroskaTagger.DataSources
       connection = null;
     }
 
-    public static MatroskaTags CopyEpisodeToTag(MatroskaTags tag, Episode ep)
+    private static SeriesTag CopyEpisodeToTag(SeriesTag tag, Episode ep)
     {
-      if (Configuration.GetTagSetting(Consts.KeySeriesTitle).Write)
-        tag.Series.SetTitle(ep.SeriesInfo.Title);
-      if (Configuration.GetTagSetting(Consts.KeySeriesImdb).Write)
-        tag.Series.IMDB_ID = ep.SeriesInfo.IMDB_ID;
-      if (Configuration.GetTagSetting(Consts.KeySeriesSeasonIndex).Write)
-        tag.Series.SeasonIndex = ep.SeasonIndex;
-      if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeIndizes).Write)
-        tag.Series.EpisodeIndexList = ep.EpisodeIndexList.AsReadOnly();
-      if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeFirstAired).Write)
-        tag.Series.EpisodeFirstAired = ep.FirstAired;
+      tag.SeriesName = ep.SeriesInfo.Title;
+      tag.IMDB_ID = ep.SeriesInfo.IMDB_ID;
+      tag.TVDB_ID = ep.SeriesInfo.ID.ToString();
+      tag.SeasonIndex = ep.SeasonIndex.ToString();
+      tag.EpisodeIndexList = ep.EpisodeIndexList.AsReadOnly();
+      tag.EpisodeFirstAired = ep.FirstAired;
 
       // additional series tags
-      if (Configuration.GetTagSetting(Consts.KeySeriesTitleSort).Write)
-        tag.Series.SeriesName.SortWith = ep.SeriesInfo.TitleSort;
-      if (Configuration.GetTagSetting(Consts.KeySeriesGenre).Write)
-        tag.Series.SeriesGenreList = ep.SeriesInfo.Genre.AsReadOnly();
-      if (Configuration.GetTagSetting(Consts.KeySeriesFirstAired).Write)
-        tag.Series.SeriesFirstAired = ep.SeriesInfo.FirstAired;
+      tag.SeriesFirstAired = ep.SeriesInfo.FirstAired;
+      tag.Network = ep.SeriesInfo.Network;
+      tag.SeriesOverview = ep.SeriesInfo.Summary;
+
+      tag.SeriesGenreList = ep.SeriesInfo.Genre.AsReadOnly();
+      tag.SeriesActors = ep.SeriesInfo.Actors.AsReadOnly();
 
       // additional episode tags
-      if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeTitle).Write)
-        tag.Series.EpisodeTitle = ep.EpisodeName;
-      //if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeSummary).Write)
-      //  tag.Series.EpisodeFirstAired = ep.Summary;
+      tag.EpisodeTitle = ep.EpisodeName;
+      tag.EpisodeIMDB_ID = ep.IMDB_ID;
+      tag.EpisodeOverview = ep.Summary;
 
-      //if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeFirstAired).Write)
-      //  tag.Series.EpisodeFirstAired = ep.GuestStars;
-      //if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeFirstAired).Write)
-      //  tag.Series.EpisodeFirstAired = ep.Directors;
-      //if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeFirstAired).Write)
-      //  tag.Series.EpisodeFirstAired = ep.Writers;
+      tag.GuestStars = ep.GuestStars.AsReadOnly();
+      tag.Directors = ep.Directors.AsReadOnly();
+      tag.Writers = ep.Writers.AsReadOnly();
 
       return tag;
     }
-  }
 
-  public class Episode
-  {
-    public string Filename { get; set; }
-    public string CompositeID { get; set; }
+    //private static SeriesTag CopyEpisodeToTag(SeriesTag tag, Episode ep)
+    //{
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesTitle).Write)
+    //    tag.Series.SetTitle(ep.SeriesInfo.Title);
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesImdb).Write)
+    //    tag.Series.IMDB_ID = ep.SeriesInfo.IMDB_ID;
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesSeasonIndex).Write)
+    //    tag.Series.SeasonIndex = ep.SeasonIndex;
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeIndizes).Write)
+    //    tag.Series.EpisodeIndexList = ep.EpisodeIndexList.AsReadOnly();
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeFirstAired).Write)
+    //    tag.Series.EpisodeFirstAired = ep.FirstAired;
 
-    public int SeriesID { get; set; }
-    public int SeasonIndex { get; set; }
-    public List<int> EpisodeIndexList { get; set; }
-    public string FirstAired { get; set; }
+    //  // additional series tags
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesTitleSort).Write)
+    //    tag.Series.SeriesName.SortWith = ep.SeriesInfo.TitleSort;
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesGenre).Write)
+    //    tag.Series.SeriesGenreList = ep.SeriesInfo.Genre.AsReadOnly();
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesFirstAired).Write)
+    //    tag.Series.SeriesFirstAired = ep.SeriesInfo.FirstAired;
 
-    public string EpisodeName { get; set; }
-    public string Summary { get; set; }
+    //  // additional episode tags
+    //  if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeTitle).Write)
+    //    tag.Series.EpisodeTitle = ep.EpisodeName;
+    //  //if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeSummary).Write)
+    //  //  tag.Series.EpisodeFirstAired = ep.Summary;
 
-    public List<string> GuestStars { get; set; }
-    public List<string> Directors { get; set; }
-    public List<string> Writers { get; set; }
+    //  //if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeFirstAired).Write)
+    //  //  tag.Series.EpisodeFirstAired = ep.GuestStars;
+    //  //if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeFirstAired).Write)
+    //  //  tag.Series.EpisodeFirstAired = ep.Directors;
+    //  //if (Configuration.GetTagSetting(Consts.KeySeriesEpisodeFirstAired).Write)
+    //  //  tag.Series.EpisodeFirstAired = ep.Writers;
 
-    public Series SeriesInfo { get; set; }
+    //  return tag;
+    //}
 
-    public Episode()
+    private class Episode
     {
-      EpisodeIndexList = new List<int>();
+      public string Filename { get; set; }
+      public string CompositeID { get; set; }
 
-      GuestStars = new List<string>();
-      Directors = new List<string>();
-      Writers = new List<string>();
+      public int SeriesID { get; set; }
+      public int SeasonIndex { get; set; }
+      public List<string> EpisodeIndexList { get; set; }
+      public string FirstAired { get; set; }
+
+      public string EpisodeName { get; set; }
+      public string IMDB_ID { get; set; }
+      public string Summary { get; set; }
+
+      public List<string> GuestStars { get; set; }
+      public List<string> Directors { get; set; }
+      public List<string> Writers { get; set; }
+
+      public Series SeriesInfo { get; set; }
+
+      public Episode()
+      {
+        EpisodeIndexList = new List<string>();
+
+        GuestStars = new List<string>();
+        Directors = new List<string>();
+        Writers = new List<string>();
+      }
+
+      public override string ToString()
+      {
+        return String.Format("Episode: ({1}_S{2}_E{3}) file: {0}", Filename, SeriesID, SeasonIndex,
+                             String.Join("_E", EpisodeIndexList));
+      }
+
+      public string ToStringNoFilename()
+      {
+        return String.Format("Episode: ({1}_S{2}_E{3}) file: ", Filename, SeriesID, SeasonIndex,
+                             String.Join("_E", EpisodeIndexList));
+      }
     }
 
-    public override string ToString()
+    private class Series
     {
-      return String.Format("Episode: ({1}_S{2}_E{3}) file: {0}", Filename, SeriesID, SeasonIndex,
-                           String.Join("_E", EpisodeIndexList));
-    }
+      public int ID { get; set; }
+      public string Title { get; set; }
+      public string IMDB_ID { get; set; }
 
-    public string ToStringNoFilename()
-    {
-      return String.Format("Episode: ({1}_S{2}_E{3}) file: ", Filename, SeriesID, SeasonIndex,
-                           String.Join("_E", EpisodeIndexList));
-    }
-  }
+      public string TitleSort { get; set; }
+      public string Network { get; set; }
+      public string Summary { get; set; }
+      public string FirstAired { get; set; }
 
-  public class Series
-  {
-    public int ID { get; set; }
-    public string Title { get; set; }
-    public string IMDB_ID { get; set; }
+      public List<string> Genre { get; set; }
+      public List<string> Actors { get; set; }
 
-    public string TitleSort { get; set; }
-    public string Summary { get; set; }
-    public string FirstAired { get; set; }
+      public Series()
+      {
+        Genre = new List<string>();
+        Actors = new List<string>();
+      }
 
-    public List<string> Genre { get; set; }
-    public List<string> Actors { get; set; }
-
-    public Series()
-    {
-      Genre = new List<string>();
-      Actors = new List<string>();
-    }
-
-    public override string ToString()
-    {
-      return String.Format("Series: {0} ID: {1}", Title, ID);
+      public override string ToString()
+      {
+        return String.Format("Series: {0} ID: {1}", Title, ID);
+      }
     }
   }
 }

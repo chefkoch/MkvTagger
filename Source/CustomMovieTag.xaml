@@ -35,14 +35,39 @@
     </DockPanel>
     <Grid>
       <Grid.ColumnDefinitions>
-        <ColumnDefinition/>
-        <ColumnDefinition/>
-        <ColumnDefinition/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
-      <StackPanel Grid.Column="0">
-        <local:EditSortWith x:Name="movieName" Description="Movie Title: " TextChanged="UpdatePreview" VerticalAlignment="Bottom"/>
-        <local:EditSimple x:Name="imdbId" Description="IMDB-id:" TextChanged="UpdatePreview" VerticalAlignment="Bottom"/>
-      </StackPanel>
+      <ScrollViewer Grid.Column="0">
+        <StackPanel Grid.Column="0">
+          <GroupBox Header="Recommended for unique identification:" Padding="5">
+            <StackPanel>
+              <local:EditSimple x:Name="Title" Description="Title:" TextChanged="UpdatePreview"/>
+              <local:EditSimple x:Name="IMDB_ID" Description="IMDB-id:" TextChanged="UpdatePreview"/>
+            </StackPanel>
+          </GroupBox>
+          <GroupBox Header="Additional collection infos" Padding="5">
+            <StackPanel>
+              <local:EditSimple x:Name="CollectionTitle" Description="Title:" TextChanged="UpdatePreview"/>
+              <local:EditSimple x:Name="CollectionIndex" Description="Part Number:" TextChanged="UpdatePreview"/>
+            </StackPanel>
+          </GroupBox>
+          <GroupBox Header="Additional episode infos" Padding="5">
+            <StackPanel>
+              <DockPanel>
+                <Label DockPanel.Dock="Right" Style="{StaticResource infoLabel}" ToolTip="Date has to be in 'YYYY-MM-DD'-format." />
+                <local:EditSimple x:Name="ReleaseDate" Description="ReleaseDate:" TextChanged="UpdatePreview"/>
+              </DockPanel>
+              <local:EditMultiLine x:Name="Overview" Description="Overview:" TextChanged="UpdatePreview"/>
+              <local:EditStringList x:Name="Genres" Description="Genres:" TextChanged="UpdatePreview" />
+              <local:EditStringList x:Name="Actors" Description="Actors:" TextChanged="UpdatePreview" />
+              <local:EditStringList x:Name="Directors" Description="Directors:" TextChanged="UpdatePreview" />
+              <local:EditStringList x:Name="Writers" Description="Writers:" TextChanged="UpdatePreview" />
+            </StackPanel>
+          </GroupBox>
+        </StackPanel>
+      </ScrollViewer>
       <GroupBox Grid.Column="1" Header="Original XML">
         <avalonEdit:TextEditor Style="{StaticResource matroskaEditOld}" Name="textEditorOriginal" />
       </GroupBox>

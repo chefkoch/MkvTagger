@@ -18,6 +18,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Matroska;
 using MatroskaTagger.DataSources;
+using MkvTagger.Helper;
 
 namespace MatroskaTagger
 {
@@ -253,13 +254,13 @@ namespace MatroskaTagger
           e.Cancel = true;
           break;
         }
-
+        
         current++;
         worker.ReportProgress(100*current/total);
 
-        // read episode info from database
-        Episode ep = importer.GetEpisodeInfo(file);
-        if (ReferenceEquals(ep, null)) continue;
+        // Check only video files
+        if (!SupportedFiles.IsFileSupportedVideo(file))
+          continue;
 
         // build xml file name
         string xmlFile = GetXmlFilename(file);
@@ -271,7 +272,8 @@ namespace MatroskaTagger
         if (App.Config.BasedOnExistingTags)
           tag = MatroskaLoader.ReadTag(file);
 
-        tag = MPTVSeriesImporter.CopyEpisodeToTag(tag, ep);
+        // update tags from MP-TVSeries
+        tag.Series = importer.UpdateTags(tag.Series, file);
 
         string logText = File.Exists(xmlFile) ? "XML updated: " : "XML created: ";
         MatroskaLoader.WriteTagToXML(tag, xmlFile);
@@ -328,10 +330,6 @@ namespace MatroskaTagger
         current++;
         worker.ReportProgress(100 * current / total);
 
-        // read episode info from database
-        Episode ep = importer.GetEpisodeInfo(file);
-        if (ReferenceEquals(ep, null)) continue;
-
         // init document
         MatroskaTags tag = new MatroskaTags();
 
@@ -339,7 +337,8 @@ namespace MatroskaTagger
         if (App.Config.BasedOnExistingTags)
           tag = MatroskaLoader.ReadTag(file);
 
-        tag = MPTVSeriesImporter.CopyEpisodeToTag(tag, ep);
+        // update tags from MP-TVSeries
+        tag.Series = importer.UpdateTags(tag.Series, file);
 
         try
         {

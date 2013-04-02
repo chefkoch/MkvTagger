@@ -42,109 +42,76 @@ namespace Matroska
       _matroskaTags = tags;
     }
 
-    public bool HasMovieTitle
-    {
-      get { return !ReferenceEquals(MovieTitle, null); }
-    }
+    #region Recommended for Identification
 
-    public SortWithEntity MovieTitle
+    public string Title
     {
-      get
-      {
-        try
-        {
-          Tag movieTag = _matroskaTags.GetTag(50);
-          return new SortWithEntity(movieTag.GetSimple("TITLE"));
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-    }
-
-    public void SetTitle(string titleValue)
-    {
-      Tag movieTag = _matroskaTags.GetOrAddTag(50);
-      Simple titleSimple = movieTag.GetOrAddSimple("TITLE");
-      titleSimple.StringValue = titleValue;
+      get { return _matroskaTags.GetValue(50, "TITLE"); }
+      set { _matroskaTags.SetValue(50, "TITLE", value); }
     }
 
     public string IMDB_ID
     {
-      get
-      {
-        try
-        {
-          Tag movieTag = _matroskaTags.GetTag(50);
-          Simple imdbSimple = movieTag.GetSimple("IMDB");
-          return imdbSimple.StringValue;
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-      set
-      {
-        Tag movieTag = _matroskaTags.GetOrAddTag(50);
-        Simple imdbSimple = movieTag.GetOrAddSimple("IMDB");
-        imdbSimple.StringValue = value;
-      }
+      get { return _matroskaTags.GetValue(50, "IMDB"); }
+      set { _matroskaTags.SetValue(50, "IMDB", value); }
     }
 
-    public ReadOnlyCollection<SortWithEntity> Directors
+    #endregion
+
+    #region Additional tags for collection support
+
+    public string CollectionTitle
     {
-      get
-      {
-        List<SortWithEntity> result = new List<SortWithEntity>();
-
-        Tag movieTag = _matroskaTags.GetTag(50);
-        if (ReferenceEquals(movieTag, null)) return result.AsReadOnly();
-
-        foreach (Simple simple in movieTag.Simples.Where(s => s.Name == "DIRECTOR"))
-        {
-          result.Add(simple as SortWithEntity);
-        }
-
-        return result.AsReadOnly();
-      }
-      set
-      {
-        Tag movieTag = _matroskaTags.GetOrAddTag(50);
-        movieTag.Simples.RemoveAll(s => s.Name == "DIRECTOR");
-        foreach (SortWithEntity simple in value)
-        {
-          movieTag.Simples.Add(simple);
-        }
-      }
+      get { return _matroskaTags.GetValue(70, "TITLE"); }
+      set { _matroskaTags.SetValue(70, "TITLE", value); }
     }
 
-    public ReadOnlyCollection<Actor> Actors
+    public string CollectionIndex
     {
-      get
-      {
-        List<Actor> result = new List<Actor>();
-
-        Tag movieTag = _matroskaTags.GetTag(50);
-        if (ReferenceEquals(movieTag, null)) return result.AsReadOnly();
-
-        foreach (Simple simple in movieTag.Simples.Where(s => s.Name == "ACTOR"))
-        {
-          result.Add(simple as Actor);
-        }
-
-        return result.AsReadOnly();
-      }
-      set
-      {
-        Tag movieTag = _matroskaTags.GetOrAddTag(50);
-        movieTag.Simples.RemoveAll(s => s.Name == "ACTOR");
-        foreach (Actor simple in value)
-        {
-          movieTag.Simples.Add(simple);
-        }
-      }
+      get { return _matroskaTags.GetValue(50, "PART_NUMBER"); }
+      set { _matroskaTags.SetValue(50, "PART_NUMBER", value); }
     }
+
+    #endregion
+
+    #region Additional Movie Tags
+
+    public string ReleaseDate
+    {
+      get { return _matroskaTags.GetValue(50, "DATE_RELEASED"); }
+      set { _matroskaTags.SetValue(50, "DATE_RELEASED", value); }
+    }
+
+    public string Overview
+    {
+      get { return _matroskaTags.GetValue(50, "SUMMARY"); }
+      set { _matroskaTags.SetValue(50, "SUMMARY", value); }
+    }
+
+    public ReadOnlyCollection<string> Genres
+    {
+      get { return _matroskaTags.GetValueCollection(50, "GENRE"); }
+      set { _matroskaTags.SetValueCollection(50, "GENRE", value); }
+    }
+
+    public ReadOnlyCollection<string> Actors
+    {
+      get { return _matroskaTags.GetValueCollection(50, "ACTOR"); }
+      set { _matroskaTags.SetValueCollection(50, "ACTOR", value); }
+    }
+
+    public ReadOnlyCollection<string> Directors
+    {
+      get { return _matroskaTags.GetValueCollection(50, "DIRECTOR"); }
+      set { _matroskaTags.SetValueCollection(50, "DIRECTOR", value); }
+    }
+
+    public ReadOnlyCollection<string> Writers
+    {
+      get { return _matroskaTags.GetValueCollection(50, "WRITTEN_BY"); }
+      set { _matroskaTags.SetValueCollection(50, "WRITTEN_BY", value); }
+    }
+
+    #endregion
   }
 }

@@ -67,5 +67,10 @@ namespace Matroska
       }
       return newSimple;
     }
+
+    public void RemoveSimple(string name)
+    {
+      Simples.RemoveAll(s => s.Name == name);
+    }
   }
 }

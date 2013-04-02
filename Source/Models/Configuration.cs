@@ -8,21 +8,56 @@ using System.Xml.Serialization;
 using MatroskaTagger.DataSources;
 using System.ComponentModel;
 using MatroskaTagger.WpfExtensions;
+using MediaPortal.OnlineLibraries.TheTvDb.Data;
 
 namespace MatroskaTagger
 {
   [XmlRoot]
   public class Configuration
   {
-    #region Properties
+    private List<TvdbLanguage> availableLanguages;
+
+      #region Properties
 
     [XmlElement]
     public string MPTVSeriesDatabasePath { get; set; }
 
+    [XmlElement("tvdb_language")]
+    public string SelectedTvDbLanguageValue { get; set; }
+
+    [XmlIgnore]
+    public TvdbLanguage SelectedTvDbLanguage
+    {
+      get
+      {
+        if (string.IsNullOrEmpty(SelectedTvDbLanguageValue))
+          return TvdbLanguage.DefaultLanguage;
+
+        try
+        {
+          if (availableLanguages == null)
+            availableLanguages = new TheTvDbImporter().GetAvailableLanguages();
+
+          return availableLanguages.FirstOrDefault(l => l.Abbriviation == SelectedTvDbLanguageValue);
+        }
+        catch (Exception)
+        {
+          return TvdbLanguage.DefaultLanguage;
+        }
+      }
+      set
+      {
+        if (value == null)
+          SelectedTvDbLanguageValue = null;
+        else
+          SelectedTvDbLanguageValue = value.Abbriviation;
+      }
+    }
+
     [XmlElement]
     public bool BasedOnExistingTags { get; set; }
 
-    [XmlArray]
+    [XmlIgnore]
     public Dictionary<string, TagSetting> OptionalSeriesTags { get; set; }
 
     #endregion Properties
@@ -30,6 +65,7 @@ namespace MatroskaTagger
     public Configuration()
     {
       MPTVSeriesDatabasePath = MPTVSeriesImporter.GetDefaultDatabasePath();
+      SelectedTvDbLanguage = TvdbLanguage.DefaultLanguage;
 
       OptionalSeriesTags = new Dictionary<string, TagSetting>();
       

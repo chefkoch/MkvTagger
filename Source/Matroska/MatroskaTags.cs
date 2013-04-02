@@ -116,5 +116,69 @@ namespace Matroska
     }
 
     #endregion helper methods
+
+    public void SetValue(int targetTypeValue, string tagName, string tagString)
+    {
+      Tag targetTag = GetOrAddTag(targetTypeValue);
+
+      if (string.IsNullOrWhiteSpace(tagString))
+      {
+        targetTag.RemoveSimple(tagName);
+        return;
+      }
+
+      Simple nameSimple = targetTag.GetOrAddSimple(tagName);
+      nameSimple.StringValue = tagString;
+    }
+
+    public string GetValue(int targetTypeValue, string tagName)
+    {
+      try
+      {
+        Tag targetTag = GetTag(targetTypeValue);
+        Simple nameSimple = targetTag.GetSimple(tagName);
+        return nameSimple.StringValue;
+      }
+      catch (Exception)
+      {
+        return null;
+      }
+    }
+
+    public ReadOnlyCollection<string> GetValueCollection(int targetTypeValue, string tagName)
+    {
+      List<string> result = new List<string>();
+
+      Tag targetTag = GetTag(targetTypeValue);
+      if (ReferenceEquals(targetTag, null)) return result.AsReadOnly();
+
+      foreach (Simple nameSimple in targetTag.Simples.Where(s => s.Name == tagName))
+      {
+        try
+        {
+          result.Add(nameSimple.StringValue);
+        }
+        catch
+        {
+        }
+      }
+
+      return result.AsReadOnly();
+    }
+
+    public void SetValueCollection(int targetTypeValue, string tagName, IEnumerable<string> enumerable)
+    {
+      Tag targetTag = GetOrAddTag(targetTypeValue);
+      targetTag.Simples.RemoveAll(s => s.Name == tagName);
+
+      if (enumerable == null)
+        return;
+
+      foreach (string s in enumerable)
+      {
+        Simple nameSimple = new Simple(tagName, s);
+        targetTag.Simples.Add(nameSimple);
+      }
+    }
   }
 }

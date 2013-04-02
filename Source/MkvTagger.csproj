@@ -65,6 +65,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\EditMultiLine.xaml.cs">
+      <DependentUpon>EditMultiLine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataSources\TheTvDbImporter.cs" />
+    <Compile Include="Helper\SupportedFiles.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="SearchResult.xaml.cs">
       <DependentUpon>SearchResult.xaml</DependentUpon>
@@ -77,8 +82,8 @@
     <Compile Include="Controls\EditDate.xaml.cs">
       <DependentUpon>EditDate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\EditGenre.xaml.cs">
-      <DependentUpon>EditGenre.xaml</DependentUpon>
+    <Compile Include="Controls\EditStringList.xaml.cs">
+      <DependentUpon>EditStringList.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomSeriesTag.xaml.cs">
       <DependentUpon>CustomSeriesTag.xaml</DependentUpon>
@@ -93,9 +98,7 @@
       <DependentUpon>CustomMusicVideoTag.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataSources\MPTVSeriesImporter.cs" />
-    <Compile Include="Matroska\Helpers\Actor.cs" />
     <Compile Include="Matroska\Helpers\MusicVideoTag.cs" />
-    <Compile Include="Matroska\Helpers\SortWithEntity.cs" />
     <Compile Include="Matroska\Simple.cs" />
     <Compile Include="Matroska\Targets.cs" />
     <Compile Include="Matroska\Tag.cs" />
@@ -125,7 +128,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\EditGenre.xaml">
+    <Page Include="Controls\EditStringList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\EditMultiLine.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

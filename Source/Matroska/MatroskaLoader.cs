@@ -226,5 +226,16 @@ namespace Matroska
 
       return exitCode;
     }
+
+    public static MatroskaTags Clone(MatroskaTags baseTag)
+    {
+      if (!ReferenceEquals(baseTag, null))
+      {
+        string xmlString = GetXML(baseTag);
+        return ReadTagFromXML(xmlString);
+      }
+      
+      return new MatroskaTags();
+    }
   }
 }

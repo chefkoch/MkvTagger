@@ -4,25 +4,49 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Windows;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using MatroskaTagger.DataSources;
 using System.ComponentModel;
 using MatroskaTagger.WpfExtensions;
+using MediaPortal.OnlineLibraries.TheTvDb;
+using MediaPortal.OnlineLibraries.TheTvDb.Data;
 
 namespace MatroskaTagger
 {
   public class ConfigurationViewModel : INotifyPropertyChanged
   {
+    private Visibility _settingsVisible;
     private string _mptvSeriesDatabasePath;
+    private TvdbLanguage _selectedTvDbLanguage;
+    private List<TvdbLanguage> _availableTvDbLanguages;
     private bool _basedOnExistingTags;
 
     #region Properties
+
+    public Visibility SettingsVisible
+    {
+      get { return _settingsVisible; }
+      set { PropertyChanged.ChangeAndNotify(ref _settingsVisible, value, () => SettingsVisible); }
+    }
 
     public string MPTVSeriesDatabasePath
     {
       get { return _mptvSeriesDatabasePath; }
       set { PropertyChanged.ChangeAndNotify(ref _mptvSeriesDatabasePath, value, () => MPTVSeriesDatabasePath); }
+    }
+
+    public TvdbLanguage SelectedTvDbLanguage
+    {
+      get { return _selectedTvDbLanguage; }
+      set { PropertyChanged.ChangeAndNotify(ref _selectedTvDbLanguage, value, () => SelectedTvDbLanguage); }
+    }
+
+    public List<TvdbLanguage> AvailableTvDbLanguages
+    {
+      get { return _availableTvDbLanguages; }
+      set { PropertyChanged.ChangeAndNotify(ref _availableTvDbLanguages, value, () => AvailableTvDbLanguages); }
     }
 
     public bool BasedOnExistingTags
@@ -94,7 +118,10 @@ namespace MatroskaTagger
 
     public ConfigurationViewModel()
     {
+      SettingsVisible = Visibility.Collapsed;
       MPTVSeriesDatabasePath = MPTVSeriesImporter.GetDefaultDatabasePath();
+      SelectedTvDbLanguage = TvdbLanguage.DefaultLanguage;
+
       if (OptionalSeriesTags == null)
       {
         OptionalSeriesTags = new ObservableCollection<TagSetting>();
@@ -102,23 +129,33 @@ namespace MatroskaTagger
         foreach (TagSetting tag in Consts.SeriesTags)
           OptionalSeriesTags.Add(tag);
       }
+
+      LoadSettings(null);
     }
 
     #endregion Constructors
 
     public void LoadSettings(object parameter)
     {
-      MPTVSeriesDatabasePath = App.Config.MPTVSeriesDatabasePath;
-      BasedOnExistingTags = App.Config.BasedOnExistingTags;
+      SettingsVisible = Visibility.Collapsed;
 
+      AvailableTvDbLanguages = new TheTvDbImporter().GetAvailableLanguages();
+
+      MPTVSeriesDatabasePath = App.Config.MPTVSeriesDatabasePath;
+      SelectedTvDbLanguage = App.Config.SelectedTvDbLanguage;
+
+      BasedOnExistingTags = App.Config.BasedOnExistingTags;
       OptionalSeriesTags = new ObservableCollection<TagSetting>(App.Config.OptionalSeriesTags.Values);
     }
 
     public void SaveSettings(object parameter)
     {
-      App.Config.MPTVSeriesDatabasePath = MPTVSeriesDatabasePath;
-      App.Config.BasedOnExistingTags = BasedOnExistingTags;
+      SettingsVisible = Visibility.Visible;
 
+      App.Config.MPTVSeriesDatabasePath = MPTVSeriesDatabasePath;
+      App.Config.SelectedTvDbLanguage = SelectedTvDbLanguage;
+
+      App.Config.BasedOnExistingTags = BasedOnExistingTags;
       foreach (TagSetting setting in OptionalSeriesTags)
         App.Config.OptionalSeriesTags[setting.ID] = setting;
     }

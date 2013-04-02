@@ -60,7 +60,7 @@
             <local:EditSimple x:Name="trackTitle" Description="Title: " TextChanged="UpdatePreview" />
             <local:EditSimple x:Name="trackNumber" Description="Number: " TextChanged="UpdatePreview" />
             <local:EditSimple x:Name="trackReleaseDate" Description="Release Date: " TextChanged="UpdatePreview" />
-            <local:EditGenre x:Name="trackGenre" TextChanged="UpdatePreview" />
+            <local:EditStringList x:Name="trackGenre" Description="Genre: " TextChanged="UpdatePreview" />
           </StackPanel>
         </GroupBox>
       </StackPanel>

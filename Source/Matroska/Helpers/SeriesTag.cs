@@ -44,135 +44,40 @@ namespace Matroska
 
     #region Recommended for Identification
 
-    public bool HasSeriesName
+    public string SeriesName
     {
-      get { return !ReferenceEquals(SeriesName, null); }
-    }
-
-    public SortWithEntity SeriesName
-    {
-      get
-      {
-        try
-        {
-          Tag seriesTag = _matroskaTags.GetTag(70);
-          return new SortWithEntity(seriesTag.GetSimple("TITLE"));
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-    }
-
-    public void SetTitle(string titleValue)
-    {
-      Tag seriesTag = _matroskaTags.GetOrAddTag(70);
-      Simple titleSimple = seriesTag.GetOrAddSimple("TITLE");
-      titleSimple.StringValue = titleValue;
+      get { return _matroskaTags.GetValue(70, "TITLE"); }
+      set { _matroskaTags.SetValue(70, "TITLE", value); }
     }
 
     public string IMDB_ID
     {
-      get
-      {
-        try
-        {
-          Tag seriesTag = _matroskaTags.GetTag(70);
-          Simple imdbSimple = seriesTag.GetSimple("IMDB");
-          return imdbSimple.StringValue;
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-      set
-      {
-        Tag seriesTag = _matroskaTags.GetOrAddTag(70);
-        Simple imdbSimple = seriesTag.GetOrAddSimple("IMDB");
-        imdbSimple.StringValue = value;
-      }
+      get { return _matroskaTags.GetValue(70, "IMDB"); }
+      set { _matroskaTags.SetValue(70, "IMDB", value); }
     }
 
-    public int? SeasonIndex
+    public string TVDB_ID
     {
-      get
-      {
-        try
-        {
-          Tag seasontag = _matroskaTags.GetTag(60);
-          Simple indexSimple = seasontag.GetSimple("PART_NUMBER");
-          return int.Parse(indexSimple.StringValue);
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-      set
-      {
-        Tag seasontag = _matroskaTags.GetOrAddTag(60);
-        Simple indexSimple = seasontag.GetOrAddSimple("PART_NUMBER");
-        indexSimple.StringValue = value.ToString();
-      }
+      get { return _matroskaTags.GetValue(70, "TVDB"); }
+      set { _matroskaTags.SetValue(70, "TVDB", value); }
     }
 
-    public ReadOnlyCollection<int> EpisodeIndexList
+    public string SeasonIndex
     {
-      get
-      {
-        List<int> result = new List<int>();
+      get { return _matroskaTags.GetValue(60, "PART_NUMBER"); }
+      set { _matroskaTags.SetValue(60, "PART_NUMBER", value); }
+    }
 
-        Tag episodetag = _matroskaTags.GetTag(50);
-        if (ReferenceEquals(episodetag, null)) return result.AsReadOnly();
-
-        foreach (Simple indexSimple in episodetag.Simples.Where(s => s.Name == "PART_NUMBER"))
-        {
-          try
-          {
-            result.Add(int.Parse(indexSimple.StringValue));
-          }
-          catch
-          {
-          }
-        }
-
-        return result.AsReadOnly();
-      }
-      set
-      {
-        Tag episodetag = _matroskaTags.GetOrAddTag(50);
-        episodetag.Simples.RemoveAll(s => s.Name == "PART_NUMBER");
-        foreach (int i in value)
-        {
-          Simple indexSimple = new Simple("PART_NUMBER", i);
-          episodetag.Simples.Add(indexSimple);
-        }
-      }
+    public ReadOnlyCollection<string> EpisodeIndexList
+    {
+      get { return _matroskaTags.GetValueCollection(50, "PART_NUMBER"); }
+      set { _matroskaTags.SetValueCollection(50, "PART_NUMBER", value); }
     }
 
     public string EpisodeFirstAired
     {
-      get
-      {
-        try
-        {
-          Tag episodetag = _matroskaTags.GetTag(50);
-          Simple dateSimple = episodetag.GetSimple("DATE_RELEASED");
-          return dateSimple.StringValue;
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-      set
-      {
-        Tag episodetag = _matroskaTags.GetOrAddTag(50);
-        Simple dateSimple = episodetag.GetOrAddSimple("DATE_RELEASED");
-        dateSimple.StringValue = value;
-      }
+      get { return _matroskaTags.GetValue(50, "DATE_RELEASED"); }
+      set { _matroskaTags.SetValue(50, "DATE_RELEASED", value); }
     }
 
     #endregion
@@ -181,59 +86,32 @@ namespace Matroska
 
     public string SeriesFirstAired
     {
-      get
-      {
-        try
-        {
-          Tag seriesTag = _matroskaTags.GetTag(70);
-          Simple dateSimple = seriesTag.GetSimple("DATE_RELEASED");
-          return dateSimple.StringValue;
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-      set
-      {
-        Tag seriesTag = _matroskaTags.GetOrAddTag(70);
-        Simple dateSimple = seriesTag.GetOrAddSimple("DATE_RELEASED");
-        dateSimple.StringValue = value;
-      }
+      get { return _matroskaTags.GetValue(70, "DATE_RELEASED"); }
+      set { _matroskaTags.SetValue(70, "DATE_RELEASED", value); }
+    }
+
+    public string Network
+    {
+      get { return _matroskaTags.GetValue(70, "NETWORK"); }
+      set { _matroskaTags.SetValue(70, "NETWORK", value); }
+    }
+
+    public string SeriesOverview
+    {
+      get { return _matroskaTags.GetValue(70, "SUMMARY"); }
+      set { _matroskaTags.SetValue(70, "SUMMARY", value); }
     }
 
     public ReadOnlyCollection<string> SeriesGenreList
     {
-      get
-      {
-        List<string> result = new List<string>();
+      get { return _matroskaTags.GetValueCollection(70, "GENRE"); }
+      set { _matroskaTags.SetValueCollection(70, "GENRE", value); }
+    }
 
-        Tag seriesTag = _matroskaTags.GetTag(70);
-        if (ReferenceEquals(seriesTag, null)) return result.AsReadOnly();
-
-        foreach (Simple genreSimple in seriesTag.Simples.Where(s => s.Name == "GENRE"))
-        {
-          try
-          {
-            result.Add(genreSimple.StringValue);
-          }
-          catch
-          {
-          }
-        }
-
-        return result.AsReadOnly();
-      }
-      set
-      {
-        Tag seriesTag = _matroskaTags.GetOrAddTag(70);
-        seriesTag.Simples.RemoveAll(s => s.Name == "GENRE");
-        foreach (string s in value)
-        {
-          Simple genreSimple = new Simple("GENRE", s);
-          seriesTag.Simples.Add(genreSimple);
-        }
-      }
+    public ReadOnlyCollection<string> SeriesActors
+    {
+      get { return _matroskaTags.GetValueCollection(70, "ACTOR"); }
+      set { _matroskaTags.SetValueCollection(70, "ACTOR", value); }
     }
 
     #endregion
@@ -242,32 +120,46 @@ namespace Matroska
 
     public string EpisodeTitle
     {
-      get
-      {
-        try
-        {
-          Tag episodetag = _matroskaTags.GetTag(50);
-          Simple titleSimple = episodetag.GetSimple("TITLE");
-          return titleSimple.StringValue;
-        }
-        catch (Exception)
-        {
-          return null;
-        }
-      }
-      set
-      {
-        Tag episodetag = _matroskaTags.GetOrAddTag(50);
-        Simple titleSimple = episodetag.GetOrAddSimple("TITLE");
-        titleSimple.StringValue = value;
-      }
+      get { return _matroskaTags.GetValue(50, "TITLE"); }
+      set { _matroskaTags.SetValue(50, "TITLE", value); }
+    }
+
+    public string EpisodeIMDB_ID
+    {
+      get { return _matroskaTags.GetValue(50, "IMDB"); }
+      set { _matroskaTags.SetValue(50, "IMDB", value); }
+    }
+
+    public string EpisodeOverview
+    {
+      get { return _matroskaTags.GetValue(50, "SUMMARY"); }
+      set { _matroskaTags.SetValue(50, "SUMMARY", value); }
+    }
+
+    public ReadOnlyCollection<string> GuestStars
+    {
+      get { return _matroskaTags.GetValueCollection(50, "ACTOR"); }
+      set { _matroskaTags.SetValueCollection(50, "ACTOR", value); }
+    }
+
+    public ReadOnlyCollection<string> Directors
+    {
+      get { return _matroskaTags.GetValueCollection(50, "DIRECTOR"); }
+      set { _matroskaTags.SetValueCollection(50, "DIRECTOR", value); }
+    }
+
+    public ReadOnlyCollection<string> Writers
+    {
+      get { return _matroskaTags.GetValueCollection(50, "WRITTEN_BY"); }
+      set { _matroskaTags.SetValueCollection(50, "WRITTEN_BY", value); }
     }
 
     #endregion
 
     public override string ToString()
     {
-      return String.Format("{0}|{1}|{2}|{3}|{4}", SeriesName, IMDB_ID, SeasonIndex, string.Join("|", EpisodeIndexList), EpisodeFirstAired);
+      return String.Format("{0}|{1}|{2}|{3}|{4}", SeriesName, IMDB_ID, SeasonIndex, string.Join("|", EpisodeIndexList),
+                           EpisodeFirstAired);
     }
 
     //public void Test()

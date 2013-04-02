@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -17,9 +18,9 @@ namespace MatroskaTagger
   /// <summary>
   /// Interaktionslogik für EditSimple.xaml
   /// </summary>
-  public partial class EditSimple : UserControl
+  public partial class EditStringList : UserControl
   {
-    public EditSimple()
+    public EditStringList()
     {
       InitializeComponent();
     }
@@ -52,17 +53,37 @@ namespace MatroskaTagger
 
     #region Value
 
-    public string Value
+    public ReadOnlyCollection<string> Value
     {
-      get { return textBox.Text; }
+      get
+      {
+        List<string> result = new List<string>();
+
+        foreach (object item in list.Items)
+          result.Add(item as string);
+
+        return result.AsReadOnly();
+      }
       set
       {
-        if (string.IsNullOrWhiteSpace(value))
-          textBox.Text = string.Empty;
-        else
-          textBox.Text = value;
+        list.Items.Clear();
+
+        if (!ReferenceEquals(value, null))
+          foreach (string s in value)
+            if (!string.IsNullOrWhiteSpace(s))
+              list.Items.Add(s);
+
+        // report change back
+        if (TextChanged != null)
+          TextChanged(this, null);
       }
     }
+
+    //public DateTime Value2
+    //{
+    //  get { return date.sel; }
+    //  set { textBox.Text = value; }
+    //}
 
     //public string Value
     //{
@@ -84,15 +105,63 @@ namespace MatroskaTagger
 
     public void Clear()
     {
-      Value = string.Empty;
-    }
-
-    private void OnTextChanged(object sender, TextChangedEventArgs e)
-    {
-      if (TextChanged != null)
-        TextChanged(this, e);
+      Value = new List<string>().AsReadOnly();
     }
 
     public event TextChangedEventHandler TextChanged;
+
+    private void add_Click(object sender, RoutedEventArgs e)
+    {
+      if (string.IsNullOrWhiteSpace(edit.Text)) return;
+
+      list.Items.Add(edit.Text);
+
+      // report change back
+      if (TextChanged != null)
+        TextChanged(this, null);
+    }
+
+    private void remove_Click(object sender, RoutedEventArgs e)
+    {
+      if (ReferenceEquals(list.SelectedItem, null)) return;
+
+      list.Items.Remove(list.SelectedItem);
+
+      // report change back
+      if (TextChanged != null)
+        TextChanged(this, null);
+    }
+
+    private void up_Click(object sender, RoutedEventArgs e)
+    {
+      if (ReferenceEquals(list.SelectedItem, null)) return;
+
+      int index = list.SelectedIndex;
+      if (index == 0) return;
+
+      string item = list.SelectedItem as string;
+      list.Items.RemoveAt(index);
+      list.Items.Insert(index - 1, item);
+
+      // report change back
+      if (TextChanged != null)
+        TextChanged(this, null);
+    }
+
+    private void down_Click(object sender, RoutedEventArgs e)
+    {
+      if (ReferenceEquals(list.SelectedItem, null)) return;
+
+      int index = list.SelectedIndex;
+      if (index == list.Items.Count - 1) return;
+
+      string item = list.SelectedItem as string;
+      list.Items.RemoveAt(index);
+      list.Items.Insert(index + 1, item);
+
+      // report change back
+      if (TextChanged != null)
+        TextChanged(this, null);
+    }
   }
 }

@@ -39,7 +39,7 @@ namespace MatroskaTagger
         txtFilename.Text = filepath;
 
         textEditorOriginal.Text = string.Empty;
-        ClearGUI();
+        UpdateGUI();
       }
       else
       {
@@ -48,40 +48,53 @@ namespace MatroskaTagger
         txtFilename.Text = filepath;
 
         textEditorOriginal.Text = MatroskaLoader.GetXML(originalTag);
-        ClearGUI();
-        UpdateGUI(originalTag);
+        UpdateGUI(originalTag.Movie);
       }
       saveButton.IsEnabled = false;
     }
 
     private void ClearGUI()
     {
-      movieName.Clear();
-      imdbId.Clear();
+      // Recommended for identification
+      Title.Clear();
+      IMDB_ID.Clear();
+
+      // additional collection infos
+      CollectionTitle.Clear();
+      CollectionIndex.Clear();
+      // additional movie infos
+      ReleaseDate.Clear();
+      Overview.Clear();
+      Genres.Clear();
+      Actors.Clear();
+      Directors.Clear();
+      Writers.Clear();
     }
 
-    private void UpdateGUI(MatroskaTags tags)
+    private void UpdateGUI(MovieTag tag = null)
     {
-      if (tags.Movie.HasMovieTitle)
-        movieName.Value = tags.Movie.MovieTitle.StringValue;
+      ClearGUI();
+      if (ReferenceEquals(tag, null)) return;
 
-      if (tags.Movie.HasMovieTitle && !string.IsNullOrEmpty(tags.Movie.MovieTitle.SortWith))
-        movieName.ValueSort = tags.Movie.MovieTitle.SortWith;
+      // Recommended for identification
+      Title.Value = tag.Title;
+      IMDB_ID.Value = tag.IMDB_ID;
 
-      if (!string.IsNullOrEmpty(tags.Movie.IMDB_ID))
-        imdbId.Value = tags.Movie.IMDB_ID;
+      // additional collection infos
+      CollectionTitle.Value = tag.CollectionTitle;
+      CollectionIndex.Value = tag.CollectionIndex;
+      // additional episode infos
+      ReleaseDate.Value = tag.ReleaseDate;
+      Overview.Value = tag.Overview;
+      Genres.Value = tag.Genres;
+      Actors.Value = tag.Actors;
+      Directors.Value = tag.Directors;
+      Writers.Value = tag.Writers;
     }
 
     private void UpdatePreview(object sender, TextChangedEventArgs e)
     {
-      MatroskaTags tag;
-      if (!ReferenceEquals(originalTag, null))
-      {
-        string xmlString = MatroskaLoader.GetXML(originalTag);
-        tag = MatroskaLoader.ReadTagFromXML(xmlString);
-      }
-      else
-        tag = new MatroskaTags();
+      MatroskaTags tag = MatroskaLoader.Clone(originalTag);
 
       tag.Movie = UpdateTagFromGUI(tag.Movie);
 
@@ -91,16 +104,20 @@ namespace MatroskaTagger
 
     private MovieTag UpdateTagFromGUI(MovieTag tag)
     {
-      if (!string.IsNullOrEmpty(movieName.Value))
-      {
-        tag.SetTitle(movieName.Value);
+      // Recommended for identification
+      tag.Title = Title.Value;
+      tag.IMDB_ID = IMDB_ID.Value;
 
-        if (!string.IsNullOrEmpty(movieName.ValueSort))
-          tag.MovieTitle.SortWith = movieName.ValueSort;
-      }
-
-      if (!string.IsNullOrEmpty(imdbId.Value))
-        tag.IMDB_ID = imdbId.Value;
+      // additional collection infos
+      tag.CollectionTitle = CollectionTitle.Value;
+      tag.CollectionIndex = CollectionIndex.Value;
+      // additional episode infos
+      tag.ReleaseDate = ReleaseDate.Value;
+      tag.Overview = Overview.Value;
+      tag.Genres = Genres.Value;
+      tag.Actors = Actors.Value;
+      tag.Directors = Directors.Value;
+      tag.Writers = Writers.Value;
 
       return tag;
     }
