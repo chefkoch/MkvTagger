@@ -1,1 +1,0 @@
-@"%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" MatroskaTagger.sln /target:Rebuild  /property:Configuration=Release
