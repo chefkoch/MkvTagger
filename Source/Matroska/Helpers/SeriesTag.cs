@@ -90,16 +90,16 @@ namespace Matroska
       set { _matroskaTags.SetValue(70, "DATE_RELEASED", value); }
     }
 
-    public string Network
-    {
-      get { return _matroskaTags.GetValue(70, "NETWORK"); }
-      set { _matroskaTags.SetValue(70, "NETWORK", value); }
-    }
-
     public string SeriesOverview
     {
       get { return _matroskaTags.GetValue(70, "SUMMARY"); }
       set { _matroskaTags.SetValue(70, "SUMMARY", value); }
+    }
+
+    public string Certification
+    {
+      get { return _matroskaTags.GetValue(70, "LAW_RATING"); }
+      set { _matroskaTags.SetValue(70, "LAW_RATING", value); }
     }
 
     public ReadOnlyCollection<string> SeriesGenreList
@@ -112,6 +112,18 @@ namespace Matroska
     {
       get { return _matroskaTags.GetValueCollection(70, "ACTOR"); }
       set { _matroskaTags.SetValueCollection(70, "ACTOR", value); }
+    }
+
+    public string SeriesKeywords
+    {
+      get { return _matroskaTags.GetValue(70, "KEYWORDS"); }
+      set { _matroskaTags.SetValue(70, "KEYWORDS", value); }
+    }
+
+    public string Network
+    {
+      get { return _matroskaTags.GetValue(70, "NETWORK"); }
+      set { _matroskaTags.SetValue(70, "NETWORK", value); }
     }
 
     #endregion
@@ -152,6 +164,12 @@ namespace Matroska
     {
       get { return _matroskaTags.GetValueCollection(50, "WRITTEN_BY"); }
       set { _matroskaTags.SetValueCollection(50, "WRITTEN_BY", value); }
+    }
+
+    public string EpisodeKeywords
+    {
+      get { return _matroskaTags.GetValue(50, "KEYWORDS"); }
+      set { _matroskaTags.SetValue(50, "KEYWORDS", value); }
     }
 
     #endregion

@@ -56,6 +56,12 @@ namespace Matroska
       set { _matroskaTags.SetValue(50, "IMDB", value); }
     }
 
+    public string TMDB_ID
+    {
+      get { return _matroskaTags.GetValue(50, "TMDB"); }
+      set { _matroskaTags.SetValue(50, "TMDB", value); }
+    }
+
     #endregion
 
     #region Additional tags for collection support
@@ -72,6 +78,12 @@ namespace Matroska
       set { _matroskaTags.SetValue(50, "PART_NUMBER", value); }
     }
 
+    public string CollectionKeywords
+    {
+      get { return _matroskaTags.GetValue(70, "KEYWORDS"); }
+      set { _matroskaTags.SetValue(70, "KEYWORDS", value); }
+    }
+
     #endregion
 
     #region Additional Movie Tags
@@ -86,6 +98,18 @@ namespace Matroska
     {
       get { return _matroskaTags.GetValue(50, "SUMMARY"); }
       set { _matroskaTags.SetValue(50, "SUMMARY", value); }
+    }
+
+    public string Tagline
+    {
+      get { return _matroskaTags.GetValue(50, "SUBTITLE"); }
+      set { _matroskaTags.SetValue(50, "SUBTITLE", value); }
+    }
+
+    public string Certification
+    {
+      get { return _matroskaTags.GetValue(50, "LAW_RATING"); }
+      set { _matroskaTags.SetValue(50, "LAW_RATING", value); }
     }
 
     public ReadOnlyCollection<string> Genres
@@ -110,6 +134,12 @@ namespace Matroska
     {
       get { return _matroskaTags.GetValueCollection(50, "WRITTEN_BY"); }
       set { _matroskaTags.SetValueCollection(50, "WRITTEN_BY", value); }
+    }
+
+    public string MovieKeywords
+    {
+      get { return _matroskaTags.GetValue(50, "KEYWORDS"); }
+      set { _matroskaTags.SetValue(50, "KEYWORDS", value); }
     }
 
     #endregion
