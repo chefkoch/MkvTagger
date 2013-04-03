@@ -180,5 +180,23 @@ namespace Matroska
         targetTag.Simples.Add(nameSimple);
       }
     }
+
+    /// <summary>
+    /// Cleans up empty tags, which only contain a target type value, but no simples
+    /// </summary>
+    /// <param name="tags"></param>
+    /// <returns></returns>
+    internal void Cleanup()
+    {
+      foreach (Tag tag in TagList)
+      {
+        if (tag.Simples.Count > 0) continue;
+
+        // Remove current item, start cleanup from beginning (recoursive) and stop current iteration
+        TagList.Remove(tag);
+        Cleanup();
+        break;
+      }
+    }
   }
 }
