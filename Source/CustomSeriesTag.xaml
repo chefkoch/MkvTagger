@@ -24,12 +24,10 @@
                Background="#FFF2F2F2">
       <ToolBar x:Name="tbToolBar" DockPanel.Dock="Left" 
                Background="{x:Null}">
-        <Button Click="refreshButton_OnClick" ToolTip="Reload tags from file">Refresh</Button>
-        <Button x:Name="saveButton" Click="SaveButton_OnClick" IsEnabled="False" ToolTip="Save">
-          Save
-        </Button>
-        <Button Click="mpTVSeries_OnClick">MP-TVSeries</Button>
-        <Button Click="thetvdb_OnClick">TheTvDB</Button>
+        <Button Click="refreshButton_OnClick" Content="Refresh" ToolTip="Reload tags from file" />
+        <Button x:Name="saveButton" Content="Save" Click="SaveButton_OnClick" IsEnabled="False" ToolTip="Save" />
+        <Button Click="mpTVSeries_OnClick" Content="MP-TVSeries"/>
+        <Button Click="tvdb_OnClick" Content="TheTvDB.com"/>
         <!--<Button ToolTip="Delete">
                 <Image Source="Delete.png"/>
               </Button>-->
@@ -62,6 +60,12 @@
               <local:EditMultiLine x:Name="seriesSummary" Description="Summary:" TextChanged="UpdatePreview"/>
               <local:EditStringList x:Name="seriesGenre" Description="Genre:" TextChanged="UpdatePreview" />
               <local:EditStringList x:Name="seriesActors" Description="Actors:" TextChanged="UpdatePreview" />
+              <local:EditSimple x:Name="Certification" Description="Certification:" TextChanged="UpdatePreview"/>
+              <local:EditSimple x:Name="Network" Description="Network:" TextChanged="UpdatePreview"/>
+              <DockPanel>
+                <Label DockPanel.Dock="Right" Style="{StaticResource infoLabel}" ToolTip="Comma separated list." />
+                <local:EditSimple x:Name="seriesKeywords" Description="Keywords:" TextChanged="UpdatePreview"/>
+              </DockPanel>
             </StackPanel>
           </GroupBox>
           <GroupBox Header="Additional episode infos" Padding="5">
@@ -72,6 +76,10 @@
               <local:EditStringList x:Name="GuestStars" Description="Guest Stars:" TextChanged="UpdatePreview" />
               <local:EditStringList x:Name="Directors" Description="Directors:" TextChanged="UpdatePreview" />
               <local:EditStringList x:Name="Writers" Description="Writers:" TextChanged="UpdatePreview" />
+              <DockPanel>
+                <Label DockPanel.Dock="Right" Style="{StaticResource infoLabel}" ToolTip="Comma separated list." />
+                <local:EditSimple x:Name="episodeKeywords" Description="Keywords:" TextChanged="UpdatePreview"/>
+              </DockPanel>
             </StackPanel>
           </GroupBox>
         </StackPanel>

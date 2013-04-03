@@ -130,6 +130,7 @@ namespace MatroskaTagger.DataSources
       //seriesTag.EpisodeIndexList
 
       seriesTag.Network = series.Network;
+      seriesTag.Certification = series.ContentRating;
       seriesTag.SeriesFirstAired = series.FirstAired.ToString("yyyy-MM-dd");
       seriesTag.SeriesOverview = series.Overview;
       seriesTag.SeriesGenreList = series.Genre.AsReadOnly();

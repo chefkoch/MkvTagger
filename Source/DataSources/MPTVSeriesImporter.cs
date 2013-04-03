@@ -211,6 +211,7 @@ namespace MatroskaTagger.DataSources
       s.Network = reader["Network"].ToString();
       s.Summary = reader["Summary"].ToString();
       s.FirstAired = reader["FirstAired"].ToString();
+      s.Certification = reader["ContentRating"].ToString();
 
       s.Genre = SplitText(reader["Genre"].ToString());
       s.Actors = SplitText(reader["Actors"].ToString());
@@ -272,6 +273,7 @@ namespace MatroskaTagger.DataSources
       // additional series tags
       tag.SeriesFirstAired = ep.SeriesInfo.FirstAired;
       tag.Network = ep.SeriesInfo.Network;
+      tag.Certification = ep.SeriesInfo.Certification;
       tag.SeriesOverview = ep.SeriesInfo.Summary;
 
       tag.SeriesGenreList = ep.SeriesInfo.Genre.AsReadOnly();
@@ -378,6 +380,7 @@ namespace MatroskaTagger.DataSources
       public string Network { get; set; }
       public string Summary { get; set; }
       public string FirstAired { get; set; }
+      public string Certification { get; set; }
 
       public List<string> Genre { get; set; }
       public List<string> Actors { get; set; }

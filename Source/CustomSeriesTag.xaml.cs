@@ -69,6 +69,9 @@ namespace MatroskaTagger
       seriesSummary.Clear();
       seriesGenre.Clear();
       seriesActors.Clear();
+      Certification.Clear();
+      Network.Clear();
+      seriesKeywords.Clear();
       // additional episode infos
       episodeIMDB.Clear();
       episodeTitle.Clear();
@@ -76,6 +79,7 @@ namespace MatroskaTagger
       GuestStars.Clear();
       Directors.Clear();
       Writers.Clear();
+      episodeKeywords.Clear();
     }
 
     private void UpdateGUI(SeriesTag tag = null)
@@ -96,6 +100,9 @@ namespace MatroskaTagger
       seriesSummary.Value = tag.SeriesOverview;
       seriesGenre.Value = tag.SeriesGenreList;
       seriesActors.Value = tag.SeriesActors;
+      Certification.Value = tag.Certification;
+      Network.Value = tag.Network;
+      seriesKeywords.Value = tag.SeriesKeywords;
       // additional episode infos
       episodeIMDB.Value = tag.EpisodeIMDB_ID;
       episodeTitle.Value = tag.EpisodeTitle;
@@ -103,6 +110,7 @@ namespace MatroskaTagger
       GuestStars.Value = tag.GuestStars;
       Directors.Value = tag.Directors;
       Writers.Value = tag.Writers;
+      episodeKeywords.Value = tag.EpisodeKeywords;
     }
 
     private void UpdatePreview(object sender, TextChangedEventArgs e)
@@ -110,6 +118,7 @@ namespace MatroskaTagger
       MatroskaTags tag = MatroskaLoader.Clone(originalTag);
 
       tag.Series = UpdateTagFromGUI(tag.Series);
+      tag.Cleanup();
 
       textEditorNew.Text = MatroskaLoader.GetXML(tag);
       saveButton.IsEnabled = true;
@@ -130,6 +139,9 @@ namespace MatroskaTagger
       tag.SeriesOverview = seriesSummary.Value;
       tag.SeriesGenreList = seriesGenre.Value;
       tag.SeriesActors = seriesActors.Value;
+      tag.Certification = Certification.Value;
+      tag.Network = Network.Value;
+      tag.SeriesKeywords = seriesKeywords.Value;
       // additional episode infos
       tag.EpisodeIMDB_ID = episodeIMDB.Value;
       tag.EpisodeTitle = episodeTitle.Value;
@@ -137,6 +149,7 @@ namespace MatroskaTagger
       tag.GuestStars = GuestStars.Value;
       tag.Directors = Directors.Value;
       tag.Writers = Writers.Value;
+      tag.EpisodeKeywords = episodeKeywords.Value;
 
       return tag;
     }
@@ -203,7 +216,7 @@ namespace MatroskaTagger
       UpdateGUI(tag.Series);
     }
 
-    private void thetvdb_OnClick(object sender, RoutedEventArgs e)
+    private void tvdb_OnClick(object sender, RoutedEventArgs e)
     {
       if (string.IsNullOrWhiteSpace(txtFilename.Text)) return;
       if (!File.Exists(txtFilename.Text)) return;
