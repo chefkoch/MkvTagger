@@ -52,9 +52,9 @@ namespace MatroskaTagger.DataSources
       TvdbSearchResult searchResult;
 
       if (!string.IsNullOrEmpty(imdb))
-        searchResult = SearchSeriesFromTVDB(imdb, true);
+        searchResult = SearchSeries(imdb, true);
       else
-        searchResult = SearchSeriesFromTVDB(name);
+        searchResult = SearchSeries(name);
 
       if (searchResult == null)
         return seriesTag;
@@ -66,7 +66,7 @@ namespace MatroskaTagger.DataSources
       return CopySeriesInfos(seriesTag, series, iSeason, iEpisode);
     }
 
-    private TvdbSearchResult SearchSeriesFromTVDB(string idOrName, bool stringIsIMDB = false)
+    private TvdbSearchResult SearchSeries(string idOrName, bool stringIsIMDB = false)
     {
       TvdbSearchResult result;
       if (stringIsIMDB)

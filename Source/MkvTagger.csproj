@@ -68,6 +68,7 @@
     <Compile Include="Controls\EditMultiLine.xaml.cs">
       <DependentUpon>EditMultiLine.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataSources\TheMovieDbImporter.cs" />
     <Compile Include="DataSources\TheTvDbImporter.cs" />
     <Compile Include="Helper\SupportedFiles.cs" />
     <Compile Include="Models\Configuration.cs" />
@@ -221,6 +222,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="MediaPortal.OnlineLibraries\MediaPortal.OnlineLibraries.TheMovieDb\MediaPortal.OnlineLibraries.TheMovieDb.csproj">
+      <Project>{24B5D6EE-3937-4A1F-9399-836E9377718C}</Project>
+      <Name>MediaPortal.OnlineLibraries.TheMovieDb</Name>
+    </ProjectReference>
     <ProjectReference Include="MediaPortal.OnlineLibraries\MediaPortal.OnlineLibraries.TheTvDb\MediaPortal.OnlineLibraries.TheTvDb.csproj">
       <Project>{A1610C93-9B53-4D04-BE42-C5D90D5D5680}</Project>
       <Name>MediaPortal.OnlineLibraries.TheTvDb</Name>

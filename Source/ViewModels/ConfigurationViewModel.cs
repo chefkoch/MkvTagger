@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,6 +11,7 @@ using System.Xml.Serialization;
 using MatroskaTagger.DataSources;
 using System.ComponentModel;
 using MatroskaTagger.WpfExtensions;
+using MediaPortal.OnlineLibraries.TheMovieDb;
 using MediaPortal.OnlineLibraries.TheTvDb;
 using MediaPortal.OnlineLibraries.TheTvDb.Data;
 
@@ -21,6 +23,8 @@ namespace MatroskaTagger
     private string _mptvSeriesDatabasePath;
     private TvdbLanguage _selectedTvDbLanguage;
     private List<TvdbLanguage> _availableTvDbLanguages;
+    private CultureInfo _selectedTMDBLanguage;
+    private List<CultureInfo> _availableTMDBLanguages;
     private bool _basedOnExistingTags;
 
     #region Properties
@@ -47,6 +51,18 @@ namespace MatroskaTagger
     {
       get { return _availableTvDbLanguages; }
       set { PropertyChanged.ChangeAndNotify(ref _availableTvDbLanguages, value, () => AvailableTvDbLanguages); }
+    }
+
+    public CultureInfo SelectedTMDBLanguage
+    {
+      get { return _selectedTMDBLanguage; }
+      set { PropertyChanged.ChangeAndNotify(ref _selectedTMDBLanguage, value, () => SelectedTMDBLanguage); }
+    }
+
+    public List<CultureInfo> AvailableTMDBLanguages
+    {
+      get { return _availableTMDBLanguages; }
+      set { PropertyChanged.ChangeAndNotify(ref _availableTMDBLanguages, value, () => AvailableTMDBLanguages); }
     }
 
     public bool BasedOnExistingTags
@@ -120,7 +136,6 @@ namespace MatroskaTagger
     {
       SettingsVisible = Visibility.Collapsed;
       MPTVSeriesDatabasePath = MPTVSeriesImporter.GetDefaultDatabasePath();
-      SelectedTvDbLanguage = TvdbLanguage.DefaultLanguage;
 
       if (OptionalSeriesTags == null)
       {
@@ -137,24 +152,26 @@ namespace MatroskaTagger
 
     public void LoadSettings(object parameter)
     {
-      SettingsVisible = Visibility.Collapsed;
-
+      //SettingsVisible = Visibility.Collapsed;
       AvailableTvDbLanguages = new TheTvDbImporter().GetAvailableLanguages();
-
-      MPTVSeriesDatabasePath = App.Config.MPTVSeriesDatabasePath;
       SelectedTvDbLanguage = App.Config.SelectedTvDbLanguage;
 
+      AvailableTMDBLanguages = CultureInfo.GetCultures(CultureTypes.AllCultures).ToList();
+      SelectedTMDBLanguage = App.Config.SelectedTMDBLanguage;
+
+      MPTVSeriesDatabasePath = App.Config.MPTVSeriesDatabasePath;
       BasedOnExistingTags = App.Config.BasedOnExistingTags;
       OptionalSeriesTags = new ObservableCollection<TagSetting>(App.Config.OptionalSeriesTags.Values);
     }
 
     public void SaveSettings(object parameter)
     {
-      SettingsVisible = Visibility.Visible;
+      //SettingsVisible = Visibility.Visible;
+
+      App.Config.SelectedTvDbLanguage = SelectedTvDbLanguage;
+      App.Config.SelectedTMDBLanguage = SelectedTMDBLanguage;
 
       App.Config.MPTVSeriesDatabasePath = MPTVSeriesDatabasePath;
-      App.Config.SelectedTvDbLanguage = SelectedTvDbLanguage;
-
       App.Config.BasedOnExistingTags = BasedOnExistingTags;
       foreach (TagSetting setting in OptionalSeriesTags)
         App.Config.OptionalSeriesTags[setting.ID] = setting;

@@ -16,10 +16,10 @@
     </ResourceDictionary>
   </UserControl.Resources>
   <DockPanel DataContext="{Binding Source={StaticResource config}}">
-    <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-      <Button Content="Load" Margin="5" Command="{Binding LoadSettingsCommand}"/>
+    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+      <!--<Button Content="Load" Margin="5" Command="{Binding LoadSettingsCommand}"/>-->
       <Button Content="Save" Margin="5" Command="{Binding SaveSettingsCommand}"/>
-    </StackPanel>-->
+    </StackPanel>
     <DockPanel>
       <Grid DockPanel.Dock="Top">
         <Grid.ColumnDefinitions>
@@ -38,6 +38,14 @@
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" Content="Language for TheTvDb data:" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <ComboBox Grid.Column="1" SelectedValue="{Binding SelectedTvDbLanguage,Mode=TwoWay}" ItemsSource="{Binding AvailableTvDbLanguages}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+      </Grid>
+      <Grid DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="Language for TheMovieDb data:" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ComboBox Grid.Column="1" SelectedValue="{Binding SelectedTMDBLanguage,Mode=TwoWay}" ItemsSource="{Binding AvailableTMDBLanguages}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
       </Grid>
       <DataGrid/>
       <!--<DataGrid ItemsSource="{Binding OptionalSeriesTags}">

@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
              mc:Ignorable="d" 
              d:DesignHeight="372" d:DesignWidth="845"
              xmlns:local="clr-namespace:MatroskaTagger"
@@ -24,10 +25,18 @@
                Background="#FFF2F2F2">
       <ToolBar x:Name="tbToolBar" DockPanel.Dock="Left" 
                Background="{x:Null}">
-        <Button Click="refreshButton_OnClick" ToolTip="Reload tags from file">Refresh</Button>
-        <Button x:Name="saveButton" Click="SaveButton_OnClick" IsEnabled="False" ToolTip="Save">
-          Save
-        </Button>
+        <Button Click="refreshButton_OnClick" Content="Refresh" ToolTip="Reload tags from file" />
+        <Button x:Name="saveButton" Content="Save" Click="SaveButton_OnClick" IsEnabled="False" ToolTip="Save" />
+        <Separator/>
+        <Label Content="GetData: "/>
+        <Button IsEnabled="False" Content="MovingPictures" ToolTip="Not implemented, yet" />
+        <Button Click="tmdb_OnClick" Content="TheMovieDB.org" />
+        <Separator/>
+        <Label Content="Open Website: "/>
+        <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CustomMovieTag}}, Path=DataContext.OpenWebsiteCommand}"
+                CommandParameter="imdb" Content="IMDB.com" />
+        <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CustomMovieTag}}, Path=DataContext.OpenWebsiteCommand}"
+                CommandParameter="tmdb" Content="TheMovieDB.org" />
         <!--<Button ToolTip="Delete">
                 <Image Source="Delete.png"/>
               </Button>-->
@@ -45,12 +54,14 @@
             <StackPanel>
               <local:EditSimple x:Name="Title" Description="Title:" TextChanged="UpdatePreview"/>
               <local:EditSimple x:Name="IMDB_ID" Description="IMDB-id:" TextChanged="UpdatePreview"/>
+              <local:EditSimple x:Name="TMDB_ID" Description="TMDB-id:" TextChanged="UpdatePreview"/>
             </StackPanel>
           </GroupBox>
           <GroupBox Header="Additional collection infos" Padding="5">
             <StackPanel>
               <local:EditSimple x:Name="CollectionTitle" Description="Title:" TextChanged="UpdatePreview"/>
               <local:EditSimple x:Name="CollectionIndex" Description="Part Number:" TextChanged="UpdatePreview"/>
+              <local:EditSimple x:Name="CollectionKeywords" Description="Keywords:" TextChanged="UpdatePreview"/>
             </StackPanel>
           </GroupBox>
           <GroupBox Header="Additional episode infos" Padding="5">
@@ -60,10 +71,13 @@
                 <local:EditSimple x:Name="ReleaseDate" Description="ReleaseDate:" TextChanged="UpdatePreview"/>
               </DockPanel>
               <local:EditMultiLine x:Name="Overview" Description="Overview:" TextChanged="UpdatePreview"/>
+              <local:EditMultiLine x:Name="Tagline" Description="Tagline:" TextChanged="UpdatePreview"/>
+              <local:EditSimple x:Name="Certification" Description="Certification:" TextChanged="UpdatePreview"/>
               <local:EditStringList x:Name="Genres" Description="Genres:" TextChanged="UpdatePreview" />
               <local:EditStringList x:Name="Actors" Description="Actors:" TextChanged="UpdatePreview" />
               <local:EditStringList x:Name="Directors" Description="Directors:" TextChanged="UpdatePreview" />
               <local:EditStringList x:Name="Writers" Description="Writers:" TextChanged="UpdatePreview" />
+              <local:EditSimple x:Name="MovieKeywords" Description="Keywords:" TextChanged="UpdatePreview"/>
             </StackPanel>
           </GroupBox>
         </StackPanel>

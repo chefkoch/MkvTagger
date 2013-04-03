@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,6 +9,7 @@ using System.Xml.Serialization;
 using MatroskaTagger.DataSources;
 using System.ComponentModel;
 using MatroskaTagger.WpfExtensions;
+using MediaPortal.OnlineLibraries.TheMovieDb;
 using MediaPortal.OnlineLibraries.TheTvDb.Data;
 
 namespace MatroskaTagger
@@ -23,36 +25,56 @@ namespace MatroskaTagger
     public string MPTVSeriesDatabasePath { get; set; }
 
     [XmlElement("tvdb_language")]
-    public string SelectedTvDbLanguageValue { get; set; }
-
-    [XmlIgnore]
-    public TvdbLanguage SelectedTvDbLanguage
+    public string SelectedTvDbLanguageValue
     {
       get
       {
-        if (string.IsNullOrEmpty(SelectedTvDbLanguageValue))
-          return TvdbLanguage.DefaultLanguage;
+        if (SelectedTvDbLanguage == null)
+          return TvdbLanguage.DefaultLanguage.Abbriviation;
 
-        try
-        {
-          if (availableLanguages == null)
-            availableLanguages = new TheTvDbImporter().GetAvailableLanguages();
-
-          return availableLanguages.FirstOrDefault(l => l.Abbriviation == SelectedTvDbLanguageValue);
-        }
-        catch (Exception)
-        {
-          return TvdbLanguage.DefaultLanguage;
-        }
+        return SelectedTvDbLanguage.Abbriviation;
       }
       set
       {
         if (value == null)
-          SelectedTvDbLanguageValue = null;
+          SelectedTvDbLanguage = TvdbLanguage.DefaultLanguage;
         else
-          SelectedTvDbLanguageValue = value.Abbriviation;
+        {
+          if (availableLanguages == null)
+            availableLanguages = new TheTvDbImporter().GetAvailableLanguages();
+
+          SelectedTvDbLanguage = availableLanguages.FirstOrDefault(l => l.Abbriviation == value);
+        }
       }
     }
+
+    [XmlIgnore]
+    public TvdbLanguage SelectedTvDbLanguage { get; set; }
+
+    [XmlElement("tmdb_language")]
+    public string SelectedTMDBLanguageValue
+    {
+      get
+      {
+        if (SelectedTMDBLanguage == null)
+          return MovieDbApiV3.DefaultLanguage;
+
+        return SelectedTMDBLanguage.TwoLetterISOLanguageName;
+      }
+      set
+      {
+        var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+        if (value == null)
+          SelectedTMDBLanguage = allCultures.FirstOrDefault(c => c.TwoLetterISOLanguageName == MovieDbApiV3.DefaultLanguage);
+        else
+        {
+          SelectedTMDBLanguage = allCultures.FirstOrDefault(c => c.TwoLetterISOLanguageName == value);
+        }
+      }
+    }
+
+    [XmlIgnore]
+    public CultureInfo SelectedTMDBLanguage { get; set; }
 
     [XmlElement]
     public bool BasedOnExistingTags { get; set; }
@@ -66,6 +88,7 @@ namespace MatroskaTagger
     {
       MPTVSeriesDatabasePath = MPTVSeriesImporter.GetDefaultDatabasePath();
       SelectedTvDbLanguage = TvdbLanguage.DefaultLanguage;
+      SelectedTMDBLanguageValue = MovieDbApiV3.DefaultLanguage;
 
       OptionalSeriesTags = new Dictionary<string, TagSetting>();
       
