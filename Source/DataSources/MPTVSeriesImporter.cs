@@ -121,7 +121,8 @@ namespace MatroskaTagger.DataSources
       Episode ep = new Episode();
       using (var command = new SQLiteCommand(connection))
       {
-        command.CommandText = String.Format("SELECT * FROM local_episodes WHERE EpisodeFilename='{0}'", filename);
+        command.CommandText = String.Format("SELECT * FROM local_episodes WHERE EpisodeFilename='{0}'",
+                                            filename.Replace("'", "''"));
 
         using (SQLiteDataReader reader = command.ExecuteReader())
         {
