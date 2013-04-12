@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 
-namespace MatroskaTagger.WpfExtensions
+namespace MkvTagger.WpfExtensions
 {
   public class DelegateCommand : ICommand
   {
@@ -14,12 +11,10 @@ namespace MatroskaTagger.WpfExtensions
     public event EventHandler CanExecuteChanged;
 
     public DelegateCommand(Action<object> execute)
-      : this(execute, null)
-    {
-    }
+      : this(execute, null) {}
 
     public DelegateCommand(Action<object> execute,
-                   Predicate<object> canExecute)
+                           Predicate<object> canExecute)
     {
       _execute = execute;
       _canExecute = canExecute;

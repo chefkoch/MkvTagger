@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Xml.Serialization;
-using MatroskaTagger.DataSources;
-using System.ComponentModel;
-using MatroskaTagger.WpfExtensions;
 using MediaPortal.OnlineLibraries.TheMovieDb;
 using MediaPortal.OnlineLibraries.TheTvDb.Data;
+using MkvTagger.DataSources;
 
-namespace MatroskaTagger
+namespace MkvTagger.Models
 {
   [XmlRoot]
   public class Configuration
   {
     private List<TvdbLanguage> availableLanguages;
 
-      #region Properties
+    #region Properties
 
     [XmlElement]
     public string MPTVSeriesDatabasePath { get; set; }
@@ -65,7 +61,8 @@ namespace MatroskaTagger
       {
         var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
         if (value == null)
-          SelectedTMDBLanguage = allCultures.FirstOrDefault(c => c.TwoLetterISOLanguageName == MovieDbApiV3.DefaultLanguage);
+          SelectedTMDBLanguage =
+            allCultures.FirstOrDefault(c => c.TwoLetterISOLanguageName == MovieDbApiV3.DefaultLanguage);
         else
         {
           SelectedTMDBLanguage = allCultures.FirstOrDefault(c => c.TwoLetterISOLanguageName == value);
@@ -91,9 +88,9 @@ namespace MatroskaTagger
       SelectedTMDBLanguageValue = MovieDbApiV3.DefaultLanguage;
 
       OptionalSeriesTags = new Dictionary<string, TagSetting>();
-      
+
       foreach (TagSetting tag in Consts.SeriesTags)
-        OptionalSeriesTags.Add(tag.ID,tag);
+        OptionalSeriesTags.Add(tag.ID, tag);
     }
 
     #region Static Methods
@@ -108,7 +105,7 @@ namespace MatroskaTagger
     {
       try
       {
-        XmlSerializer writer = new XmlSerializer(typeof (Configuration));
+        XmlSerializer writer = new XmlSerializer(typeof(Configuration));
         using (StreamWriter file = new StreamWriter(fileName))
           writer.Serialize(file, config);
 
@@ -129,7 +126,7 @@ namespace MatroskaTagger
     {
       try
       {
-        XmlSerializer reader = new XmlSerializer(typeof (Configuration));
+        XmlSerializer reader = new XmlSerializer(typeof(Configuration));
         using (StreamReader file = new StreamReader(fileName))
           return (Configuration) reader.Deserialize(file);
       }

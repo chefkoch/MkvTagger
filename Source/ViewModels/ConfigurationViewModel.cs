@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using MatroskaTagger.DataSources;
-using System.ComponentModel;
-using MatroskaTagger.WpfExtensions;
-using MediaPortal.OnlineLibraries.TheMovieDb;
-using MediaPortal.OnlineLibraries.TheTvDb;
 using MediaPortal.OnlineLibraries.TheTvDb.Data;
+using MkvTagger.DataSources;
+using MkvTagger.Models;
+using MkvTagger.WpfExtensions;
 
-namespace MatroskaTagger
+namespace MkvTagger.ViewModels
 {
   public class ConfigurationViewModel : INotifyPropertyChanged
   {
@@ -78,37 +76,41 @@ namespace MatroskaTagger
     #region Command
 
     private DelegateCommand browseTvSeriesDbCommand;
+
     public ICommand BrowseTvSeriesDbCommand
     {
       get
       {
         if (browseTvSeriesDbCommand == null)
-          browseTvSeriesDbCommand = new DelegateCommand(new Action<object>(BrowseTvSeriesDb));
+          browseTvSeriesDbCommand = new DelegateCommand(BrowseTvSeriesDb);
         return browseTvSeriesDbCommand;
       }
     }
 
     private DelegateCommand loadSettingsCommand;
+
     public ICommand LoadSettingsCommand
     {
       get
       {
         if (loadSettingsCommand == null)
-          loadSettingsCommand = new DelegateCommand(new Action<object>(LoadSettings));
+          loadSettingsCommand = new DelegateCommand(LoadSettings);
         return loadSettingsCommand;
       }
     }
 
     private DelegateCommand saveSettingsCommand;
+
     public ICommand SaveSettingsCommand
     {
       get
       {
         if (saveSettingsCommand == null)
-          saveSettingsCommand = new DelegateCommand(new Action<object>(SaveSettings));
+          saveSettingsCommand = new DelegateCommand(SaveSettings);
         return saveSettingsCommand;
       }
     }
+
     //public ICommand BrowseTvSeriesDbCommand
     //{
     //  get
@@ -121,14 +123,15 @@ namespace MatroskaTagger
     //}
 
     #endregion
-      //  public Configuration Config { get; set; } 
-      //  public PersonViewModel() 
-      //  { 
-      //      //This data will load as the default person from the model attached to
-      //      //the view 
-      //      Person = new PersonModel 
-      //{ FirstName = "John", LastName = "Doe", Age = 999 }; 
-      //  } 
+
+    //  public Configuration Config { get; set; } 
+    //  public PersonViewModel() 
+    //  { 
+    //      //This data will load as the default person from the model attached to
+    //      //the view 
+    //      Person = new PersonModel 
+    //{ FirstName = "John", LastName = "Doe", Age = 999 }; 
+    //  } 
 
     #region Constructors
 
@@ -209,7 +212,7 @@ namespace MatroskaTagger
     {
       try
       {
-        XmlSerializer writer = new XmlSerializer(typeof (Configuration));
+        XmlSerializer writer = new XmlSerializer(typeof(Configuration));
         using (StreamWriter file = new StreamWriter(fileName))
           writer.Serialize(file, config);
 
@@ -230,7 +233,7 @@ namespace MatroskaTagger
     {
       try
       {
-        XmlSerializer reader = new XmlSerializer(typeof (Configuration));
+        XmlSerializer reader = new XmlSerializer(typeof(Configuration));
         using (StreamReader file = new StreamReader(fileName))
           return (Configuration) reader.Deserialize(file);
       }

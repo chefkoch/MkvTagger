@@ -1,34 +1,16 @@
-﻿  using System;
-  using System.Collections.Generic;
-  using System.ComponentModel;
-  using System.Data.SQLite;
-  using System.Diagnostics;
-  using System.IO;
-  using System.Linq;
-  using System.Text;
-  using System.Windows;
-  using System.Windows.Controls;
-  using System.Windows.Data;
-  using System.Windows.Documents;
-  using System.Windows.Input;
-  using System.Windows.Media;
-  using System.Windows.Media.Imaging;
-  using System.Windows.Navigation;
-  using System.Xml;
-  using System.Xml.Linq;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using Matroska;
 using MediaPortal.OnlineLibraries.TheMovieDb;
 using MediaPortal.OnlineLibraries.TheMovieDb.Data;
-  using MediaPortal.OnlineLibraries.TheTvDb;
-  using MediaPortal.OnlineLibraries.TheTvDb.Data;
-using MkvTagger;
 
-namespace MatroskaTagger.DataSources
+namespace MkvTagger.DataSources
 {
   public class TheMovieDbImporter
   {
     private const string API_KEY = "67f99724d25f922fbc3a8016b7b063f6";
-    private MovieDbApiV3 movieDbApi = null;
+    private MovieDbApiV3 movieDbApi;
 
     public MovieTag UpdateTags(MovieTag movieTag)
     {

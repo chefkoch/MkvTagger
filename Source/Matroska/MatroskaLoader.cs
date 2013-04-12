@@ -23,21 +23,16 @@
 #endregion
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Matroska
 {
   public static class MatroskaLoader
   {
-    public static string[] MatroskaExtensions = new string[] { ".mkv", ".mk3d", ".mka" };
+    public static string[] MatroskaExtensions = new[] {".mkv", ".mk3d", ".mka"};
 
     internal static bool TryExtractTagFromMatroska(string matroskaFile, out MatroskaTags tags)
     {
@@ -69,7 +64,7 @@ namespace Matroska
         return ReadTagFromMatroska(fileName);
 
       // Invalid file
-      string xmlFile = System.IO.Path.ChangeExtension(fileName, ".xml");
+      string xmlFile = Path.ChangeExtension(fileName, ".xml");
       if (File.Exists(xmlFile))
         return ReadTagFromXMLFile(xmlFile);
 
@@ -84,7 +79,7 @@ namespace Matroska
       {
         XmlSerializer deserializer = new XmlSerializer(typeof(MatroskaTags));
         TextReader textReader = new StringReader(serializedTags);
-        tags = (MatroskaTags)deserializer.Deserialize(textReader);
+        tags = (MatroskaTags) deserializer.Deserialize(textReader);
         textReader.Close();
       }
       catch (Exception)
@@ -102,7 +97,7 @@ namespace Matroska
 
       try
       {
-        XmlSerializer deserializer = new XmlSerializer(typeof (MatroskaTags));
+        XmlSerializer deserializer = new XmlSerializer(typeof(MatroskaTags));
         tags = (MatroskaTags) deserializer.Deserialize(textReader);
       }
       catch (Exception)
@@ -182,7 +177,7 @@ namespace Matroska
         // Invalid file
         //throw new FileFormatException("File was not identified as XML or Matroska-file.");
         fileName = Path.ChangeExtension(fileName, ".xml");
-        WriteTagToXML(tags,fileName);
+        WriteTagToXML(tags, fileName);
       }
     }
 
@@ -234,7 +229,7 @@ namespace Matroska
         string xmlString = GetXML(baseTag);
         return ReadTagFromXML(xmlString);
       }
-      
+
       return new MatroskaTags();
     }
   }

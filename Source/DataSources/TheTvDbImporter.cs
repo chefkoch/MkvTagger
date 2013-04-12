@@ -1,32 +1,17 @@
-﻿  using System;
-  using System.Collections.Generic;
-  using System.ComponentModel;
-  using System.Data.SQLite;
-  using System.Diagnostics;
-  using System.IO;
-  using System.Linq;
-  using System.Text;
-  using System.Windows;
-  using System.Windows.Controls;
-  using System.Windows.Data;
-  using System.Windows.Documents;
-  using System.Windows.Input;
-  using System.Windows.Media;
-  using System.Windows.Media.Imaging;
-  using System.Windows.Navigation;
-  using System.Xml;
-  using System.Xml.Linq;
-  using Matroska;
-  using MediaPortal.OnlineLibraries.TheTvDb;
-  using MediaPortal.OnlineLibraries.TheTvDb.Data;
-using MkvTagger;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using Matroska;
+using MediaPortal.OnlineLibraries.TheTvDb;
+using MediaPortal.OnlineLibraries.TheTvDb.Data;
 
-namespace MatroskaTagger.DataSources
+namespace MkvTagger.DataSources
 {
   public class TheTvDbImporter
   {
     private const string API_KEY = "91A89A984264307A";
-    private TvdbHandler TVDB = null;
+    private TvdbHandler TVDB;
 
     public SeriesTag UpdateTags(SeriesTag seriesTag)
     {
@@ -43,7 +28,8 @@ namespace MatroskaTagger.DataSources
 
       int iSeason;
       int iEpisode;
-      if (!int.TryParse(seriesTag.SeasonIndex, out iSeason) || !int.TryParse(seriesTag.EpisodeIndexList.FirstOrDefault(), out iEpisode))
+      if (!int.TryParse(seriesTag.SeasonIndex, out iSeason) ||
+          !int.TryParse(seriesTag.EpisodeIndexList.FirstOrDefault(), out iEpisode))
       {
         MessageBox.Show("TvDb lookup needs season & episode index.");
         return seriesTag;

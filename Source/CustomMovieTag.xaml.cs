@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Matroska;
-using MatroskaTagger.DataSources;
-using MatroskaTagger.WpfExtensions;
+using MkvTagger.DataSources;
+using MkvTagger.WpfExtensions;
 
-namespace MatroskaTagger
+namespace MkvTagger
 {
   /// <summary>
   /// Interaktionslogik für CustomMoviesTag.xaml
@@ -31,16 +22,16 @@ namespace MatroskaTagger
 
     private MatroskaTags originalTag;
 
-
     #region Command
 
     private DelegateCommand openWebsiteCommand;
+
     public ICommand OpenWebsiteCommand
     {
       get
       {
         if (openWebsiteCommand == null)
-          openWebsiteCommand = new DelegateCommand(new Action<object>(OpenWebsite), OpenWebsiteCanExecute);
+          openWebsiteCommand = new DelegateCommand(OpenWebsite, OpenWebsiteCanExecute);
         return openWebsiteCommand;
       }
     }
@@ -98,9 +89,7 @@ namespace MatroskaTagger
       {
         Process.Start(website);
       }
-      catch (Exception)
-      {
-      }
+      catch (Exception) {}
     }
 
     #endregion

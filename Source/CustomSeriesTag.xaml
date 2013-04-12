@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="MatroskaTagger.CustomSeriesTag"
+﻿<UserControl x:Class="MkvTagger.CustomSeriesTag"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:MatroskaTagger"
              xmlns:avalonEdit="clr-namespace:ICSharpCode.AvalonEdit;assembly=ICSharpCode.AvalonEdit"
+             xmlns:controls="clr-namespace:MkvTagger.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="508" d:DesignWidth="1095">
   <UserControl.Resources>
@@ -43,42 +43,42 @@
         <StackPanel>
           <GroupBox Header="Recommended for unique identification:" Padding="5">
             <StackPanel>
-              <local:EditSimple x:Name="seriesTitle" Description="Series Title:" TextChanged="UpdatePreview"/>
-              <local:EditSimple x:Name="seriesIMDB" Description="Series IMDB-id:" TextChanged="UpdatePreview"/>
-              <local:EditSimple x:Name="seriesTVDB" Description="Series TVDB-id:" TextChanged="UpdatePreview"/>
-              <local:EditSimple x:Name="seasonIndex" Description="Season Index:" TextChanged="UpdatePreview"/>
-              <local:EditStringList x:Name="episodeIndexList" Description="Episode IndexList:" TextChanged="UpdatePreview" />
+              <controls:EditSimple x:Name="seriesTitle" Description="Series Title:" TextChanged="UpdatePreview"/>
+              <controls:EditSimple x:Name="seriesIMDB" Description="Series IMDB-id:" TextChanged="UpdatePreview"/>
+              <controls:EditSimple x:Name="seriesTVDB" Description="Series TVDB-id:" TextChanged="UpdatePreview"/>
+              <controls:EditSimple x:Name="seasonIndex" Description="Season Index:" TextChanged="UpdatePreview"/>
+              <controls:EditStringList x:Name="episodeIndexList" Description="Episode IndexList:" TextChanged="UpdatePreview" />
               <DockPanel>
                 <Label DockPanel.Dock="Right" Style="{StaticResource infoLabel}" ToolTip="Date has to be in 'YYYY-MM-DD'-format." />
-                <local:EditSimple x:Name="episodeAired" Description="Episode First Aired:" TextChanged="UpdatePreview"/>
+                <controls:EditSimple x:Name="episodeAired" Description="Episode First Aired:" TextChanged="UpdatePreview"/>
               </DockPanel>
             </StackPanel>
           </GroupBox>
           <GroupBox Header="Additional series infos" Padding="5">
             <StackPanel>
-              <local:EditSimple x:Name="seriesFirstAired" Description="First Aired:" TextChanged="UpdatePreview"/>
-              <local:EditMultiLine x:Name="seriesSummary" Description="Summary:" TextChanged="UpdatePreview"/>
-              <local:EditStringList x:Name="seriesGenre" Description="Genre:" TextChanged="UpdatePreview" />
-              <local:EditStringList x:Name="seriesActors" Description="Actors:" TextChanged="UpdatePreview" />
-              <local:EditSimple x:Name="Certification" Description="Certification:" TextChanged="UpdatePreview"/>
-              <local:EditSimple x:Name="Network" Description="Network:" TextChanged="UpdatePreview"/>
+              <controls:EditSimple x:Name="seriesFirstAired" Description="First Aired:" TextChanged="UpdatePreview"/>
+              <controls:EditMultiLine x:Name="seriesSummary" Description="Summary:" TextChanged="UpdatePreview"/>
+              <controls:EditStringList x:Name="seriesGenre" Description="Genre:" TextChanged="UpdatePreview" />
+              <controls:EditStringList x:Name="seriesActors" Description="Actors:" TextChanged="UpdatePreview" />
+              <controls:EditSimple x:Name="Certification" Description="Certification:" TextChanged="UpdatePreview"/>
+              <controls:EditSimple x:Name="Network" Description="Network:" TextChanged="UpdatePreview"/>
               <DockPanel>
                 <Label DockPanel.Dock="Right" Style="{StaticResource infoLabel}" ToolTip="Comma separated list." />
-                <local:EditSimple x:Name="seriesKeywords" Description="Keywords:" TextChanged="UpdatePreview"/>
+                <controls:EditSimple x:Name="seriesKeywords" Description="Keywords:" TextChanged="UpdatePreview"/>
               </DockPanel>
             </StackPanel>
           </GroupBox>
           <GroupBox Header="Additional episode infos" Padding="5">
             <StackPanel>
-              <local:EditSimple x:Name="episodeTitle" Description="Title:" TextChanged="UpdatePreview"/>
-              <local:EditMultiLine x:Name="episodeSummary" Description="Summary:" TextChanged="UpdatePreview"/>
-              <local:EditSimple x:Name="episodeIMDB" Description="IMDB:" TextChanged="UpdatePreview"/>
-              <local:EditStringList x:Name="GuestStars" Description="Guest Stars:" TextChanged="UpdatePreview" />
-              <local:EditStringList x:Name="Directors" Description="Directors:" TextChanged="UpdatePreview" />
-              <local:EditStringList x:Name="Writers" Description="Writers:" TextChanged="UpdatePreview" />
+              <controls:EditSimple x:Name="episodeTitle" Description="Title:" TextChanged="UpdatePreview"/>
+              <controls:EditMultiLine x:Name="episodeSummary" Description="Summary:" TextChanged="UpdatePreview"/>
+              <controls:EditSimple x:Name="episodeIMDB" Description="IMDB:" TextChanged="UpdatePreview"/>
+              <controls:EditStringList x:Name="GuestStars" Description="Guest Stars:" TextChanged="UpdatePreview" />
+              <controls:EditStringList x:Name="Directors" Description="Directors:" TextChanged="UpdatePreview" />
+              <controls:EditStringList x:Name="Writers" Description="Writers:" TextChanged="UpdatePreview" />
               <DockPanel>
                 <Label DockPanel.Dock="Right" Style="{StaticResource infoLabel}" ToolTip="Comma separated list." />
-                <local:EditSimple x:Name="episodeKeywords" Description="Keywords:" TextChanged="UpdatePreview"/>
+                <controls:EditSimple x:Name="episodeKeywords" Description="Keywords:" TextChanged="UpdatePreview"/>
               </DockPanel>
             </StackPanel>
           </GroupBox>

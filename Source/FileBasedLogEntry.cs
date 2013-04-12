@@ -22,7 +22,9 @@
 
 #endregion
 
-namespace MatroskaTagger
+using System.Diagnostics;
+
+namespace MkvTagger
 {
   public class FileBasedLogEntry
   {
@@ -44,7 +46,7 @@ namespace MatroskaTagger
     {
       string argument = @"/select, " + Filepath;
 
-      System.Diagnostics.Process.Start("explorer.exe", argument);
+      Process.Start("explorer.exe", argument);
     }
   }
 }

@@ -23,13 +23,8 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Matroska
@@ -56,9 +51,7 @@ namespace Matroska
     }
 
     public Simple(string name, int value)
-      : this(name, value.ToString())
-    {
-    }
+      : this(name, value.ToString()) {}
 
     [XmlElement("Name")]
     public string Name { get; set; }

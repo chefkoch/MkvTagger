@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Matroska;
 
-namespace MatroskaTagger
+namespace MkvTagger
 {
   /// <summary>
   /// Interaktionslogik für CustomSeriesTag.xaml
@@ -96,7 +86,7 @@ namespace MatroskaTagger
 
       if (!ReferenceEquals(tags.MusicVideo.TrackReleaseDate, null))
         trackReleaseDate.Value = tags.MusicVideo.TrackReleaseDate;
-      
+
       trackGenre.Value = tags.MusicVideo.GenreList;
 
       #endregion Track
@@ -220,17 +210,17 @@ namespace MatroskaTagger
       if (ReferenceEquals(originalTag.MusicVideo.TrackReleaseDate, null))
       {
         newFile = String.Format("{0} - {1}{2}",
-                                     originalTag.MusicVideo.TrackArtist,
-                                     originalTag.MusicVideo.TrackTitle,
-                                     ext);
+                                originalTag.MusicVideo.TrackArtist,
+                                originalTag.MusicVideo.TrackTitle,
+                                ext);
       }
       else
       {
         newFile = String.Format("{0} - {1} ({3}){2}",
-                                     originalTag.MusicVideo.TrackArtist,
-                                     originalTag.MusicVideo.TrackTitle,
-                                     ext,
-                                     originalTag.MusicVideo.TrackReleaseDate);
+                                originalTag.MusicVideo.TrackArtist,
+                                originalTag.MusicVideo.TrackTitle,
+                                ext,
+                                originalTag.MusicVideo.TrackReleaseDate);
       }
 
 

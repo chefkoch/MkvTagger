@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
 using System.Xml.Serialization;
+using MkvTagger.WpfExtensions;
 
-namespace MatroskaTagger
+namespace MkvTagger
 {
   public class TagSetting : INotifyPropertyChanged
   {
@@ -86,7 +83,7 @@ namespace MatroskaTagger
       {
         if (Forced)
           return false;
-        
+
         return _delete;
       }
       set

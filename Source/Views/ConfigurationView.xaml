@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="MatroskaTagger.Views.SettingsView"
+﻿<UserControl x:Class="MkvTagger.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MatroskaTagger" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:MkvTagger.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="375" d:DesignWidth="674">
   <UserControl.Resources>
@@ -11,7 +11,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="..\Common.Styles.xaml"/>
       </ResourceDictionary.MergedDictionaries>
-      <local:ConfigurationViewModel x:Key="config"/>
+      <viewModels:ConfigurationViewModel x:Key="config"/>
       <!--<local:Configuration x:Key="config"/>-->
     </ResourceDictionary>
   </UserControl.Resources>

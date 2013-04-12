@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
 using System.Windows;
-using Matroska;
 using MediaPortal.OnlineLibraries.TheTvDb;
+using MkvTagger.Models;
 
-namespace MatroskaTagger
+namespace MkvTagger
 {
   /// <summary>
   /// Interaktionslogik für "App.xaml"

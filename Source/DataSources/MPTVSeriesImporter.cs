@@ -1,24 +1,11 @@
-﻿  using System;
-  using System.Collections.Generic;
-  using System.ComponentModel;
-  using System.Data.SQLite;
-  using System.Diagnostics;
-  using System.IO;
-  using System.Linq;
-  using System.Text;
-  using System.Windows;
-  using System.Windows.Controls;
-  using System.Windows.Data;
-  using System.Windows.Documents;
-  using System.Windows.Input;
-  using System.Windows.Media;
-  using System.Windows.Media.Imaging;
-  using System.Windows.Navigation;
-  using System.Xml;
-  using System.Xml.Linq;
-  using Matroska;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
+using System.Windows;
+using Matroska;
 
-namespace MatroskaTagger.DataSources
+namespace MkvTagger.DataSources
 {
   public class MPTVSeriesImporter
   {
@@ -26,10 +13,6 @@ namespace MatroskaTagger.DataSources
     private const string KEY_SERIES_SORTNAME = "SeriesSortName";
 
     private SQLiteConnection connection;
-
-    public MPTVSeriesImporter()
-    {
-    }
 
     public static string GetDefaultDatabasePath()
     {
@@ -60,7 +43,7 @@ namespace MatroskaTagger.DataSources
 
     //  foreach (Episode episode in episodes.Values)
     //  {
-        
+
     //  }
 
     //  CloseConnection();
@@ -174,7 +157,7 @@ namespace MatroskaTagger.DataSources
 
       ep.SeriesID = Int32.Parse(reader["SeriesID"].ToString());
       ep.SeasonIndex = Int32.Parse(reader["SeasonIndex"].ToString());
-      
+
       ep.EpisodeIndexList.Clear();
       int index = Int32.Parse(reader["EpisodeIndex"].ToString());
       if (index != 0)

@@ -26,9 +26,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -52,8 +50,10 @@ namespace Matroska
 
     [XmlIgnore]
     public SeriesTag Series { get; set; }
+
     [XmlIgnore]
     public MovieTag Movie { get; set; }
+
     [XmlIgnore]
     public MusicVideoTag MusicVideo { get; set; }
 
@@ -83,10 +83,10 @@ namespace Matroska
       while (true)
       {
         IEnumerable<XElement> simpleCollection = tagOrSimple.Elements("Simple").Where(simple =>
-        {
-          XElement element = simple.Element("Name");
-          return element != null && element.Value == name;
-        });
+          {
+            XElement element = simple.Element("Name");
+            return element != null && element.Value == name;
+          });
 
         if (!simpleCollection.Any())
           break;
@@ -158,9 +158,7 @@ namespace Matroska
         {
           result.Add(nameSimple.StringValue);
         }
-        catch
-        {
-        }
+        catch {}
       }
 
       return result.AsReadOnly();
