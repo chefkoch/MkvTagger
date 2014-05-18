@@ -1,3 +1,3 @@
 [submodule "Source/MediaPortal.OnlineLibraries"]
 	path = Source/MediaPortal.OnlineLibraries
-	url = git@github.com:chefkoch/MediaPortal.OnlineLibraries.git
+	url = https://github.com/chefkoch/MediaPortal.OnlineLibraries.git
